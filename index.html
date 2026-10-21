@@ -1,0 +1,817 @@
+<title>Manifest für eine Soziale Marktwirtschaft des 21. Jahrhunderts</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: App-Shell. Kopfleiste mit Lesefortschritt, links Kapitelleiste (mobil: Chipleiste), rechts eine Leseebene von ~68 Zeichen, ein Kapitel pro Ansicht. */
+  :root {
+    --paper: #f3f5f4;
+    --surface: #ffffff;
+    --ink: #15201f;
+    --muted: #586664;
+    --line: #d4dcda;
+    --accent: #9b1c1c;
+    --accent-soft: #f5e2df;
+    --petrol: #1f5b58;
+    --petrol-soft: #e0ecea;
+    --pos: #2c6e4c;
+    --neg: #9b1c1c;
+    --f-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --f-read: 'Literata', Georgia, 'Times New Roman', serif;
+    --f-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --f-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', Menlo, monospace;
+    --gutter-l: max(16px, env(safe-area-inset-left, 0px));
+    --gutter-r: max(16px, env(safe-area-inset-right, 0px));
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0f1514; --surface: #172020; --ink: #e5edeb; --muted: #99a8a5; --line: #2b3735;
+      --accent: #e8766c; --accent-soft: #3a201e; --petrol: #82c6bf; --petrol-soft: #1b3230;
+      --pos: #6cc39a; --neg: #e8766c; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0f1514; --surface: #172020; --ink: #e5edeb; --muted: #99a8a5; --line: #2b3735;
+    --accent: #e8766c; --accent-soft: #3a201e; --petrol: #82c6bf; --petrol-soft: #1b3230;
+    --pos: #6cc39a; --neg: #e8766c; color-scheme: dark;
+  }
+
+  *, *::before, *::after { box-sizing: border-box; }
+  html { scroll-padding-top: calc(env(safe-area-inset-top, 0px) + 72px); }
+  body {
+    margin: 0; background: var(--paper); color: var(--ink);
+    font-family: var(--f-read); font-size: 17px; line-height: 1.7;
+    overflow-x: hidden;
+  }
+  body::before {
+    content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px);
+    z-index: 10; background: var(--surface);
+  }
+  button, input, textarea { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--petrol); outline-offset: 2px; }
+  a { color: var(--petrol); }
+
+  /* KOPFLEISTE */
+  .topbar {
+    position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20;
+    background: var(--surface); border-bottom: 1px solid var(--line);
+    padding-left: var(--gutter-l); padding-right: var(--gutter-r);
+  }
+  .topbar-inner {
+    max-width: 1180px; margin: 0 auto; padding-block: 10px;
+    display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+  }
+  .brand { display: flex; flex-direction: column; min-width: 0; flex: 1 1 260px; text-decoration: none; color: var(--ink); }
+  .brand b { font-family: var(--f-display); font-weight: 600; font-size: 1.05rem; line-height: 1.2; }
+  .brand small { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; color: var(--muted); text-transform: uppercase; }
+  .progress { display: flex; align-items: center; gap: 10px; font-family: var(--f-ui); font-size: 13px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .progress-track { width: 120px; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden; }
+  .progress-fill { height: 100%; width: 0; background: var(--accent); transition: width .4s ease; }
+  .tools { display: flex; gap: 8px; flex-wrap: wrap; }
+  .btn {
+    font-family: var(--f-ui); font-size: 13px; font-weight: 500;
+    border: 1px solid var(--line); background: var(--surface); color: var(--ink);
+    padding: 7px 12px; border-radius: 6px; cursor: pointer; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px; line-height: 1.2;
+  }
+  .btn:hover { border-color: var(--petrol); }
+  .btn[aria-pressed="true"] { background: var(--petrol); border-color: var(--petrol); color: var(--surface); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+  .btn.danger { color: var(--neg); }
+
+  /* SHELL */
+  .shell {
+    max-width: 1180px; margin: 0 auto;
+    padding-left: var(--gutter-l); padding-right: var(--gutter-r);
+    display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 48px;
+  }
+  .rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + 72px); align-self: start; padding-block: 32px; }
+  .rail ol { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 2px; }
+  .rail a {
+    display: grid; grid-template-columns: 34px 1fr 14px; align-items: baseline; gap: 4px;
+    padding: 8px 10px; border-radius: 6px; text-decoration: none; color: var(--muted);
+    font-family: var(--f-ui); font-size: 14px; line-height: 1.3;
+  }
+  .rail a:hover { background: var(--petrol-soft); color: var(--ink); }
+  .rail a[aria-current="page"] { background: var(--petrol-soft); color: var(--ink); font-weight: 600; }
+  .rail .rn { font-family: var(--f-mono); font-size: 11px; color: var(--accent); }
+  .rail .ok { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--line); justify-self: end; align-self: center; }
+  .rail a.read .ok { background: var(--pos); border-color: var(--pos); }
+  .rail .sep { height: 1px; background: var(--line); margin: 10px 0; }
+
+  main { min-width: 0; padding-block: 40px 80px; max-width: 760px; }
+  .view[hidden] { display: none; }
+  .view { animation: enter .35s ease both; }
+  @keyframes enter { from { opacity: .4; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+  @media (prefers-reduced-motion: reduce) { .view { animation: none; } .progress-fill { transition: none; } }
+
+  .eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: .22em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+  h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(2rem, 5vw, 3.2rem); line-height: 1.08; font-weight: 700; letter-spacing: -.01em; }
+  h1 em { color: var(--accent); font-weight: 600; }
+  h2 { font-size: clamp(1.5rem, 3.2vw, 2.1rem); line-height: 1.15; font-weight: 700; margin-bottom: 28px; }
+  h3 { font-size: 1.2rem; font-style: italic; font-weight: 600; color: var(--accent); margin: 40px 0 10px; display: flex; gap: 10px; align-items: baseline; }
+  h3 span { font-family: var(--f-mono); font-style: normal; font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+  h4 { font-size: 1.05rem; line-height: 1.3; font-weight: 600; }
+  p { margin: 0 0 1.1em; max-width: 68ch; }
+  .lede { font-style: italic; font-size: 1.12rem; color: var(--muted); border-left: 2px solid var(--accent); padding-left: 18px; }
+
+  .thesis { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 24px 28px; margin: 32px 0; }
+  .thesis p { font-family: var(--f-display); font-style: italic; font-size: 1.15rem; line-height: 1.6; margin: 0; }
+  .thesis strong { font-style: normal; color: var(--accent); }
+  .quote { border-left: 3px solid var(--petrol); padding: 2px 0 2px 22px; margin: 32px 0; max-width: 58ch; }
+  .quote p { font-family: var(--f-display); font-style: italic; font-size: 1.25rem; line-height: 1.45; color: var(--muted); margin: 0; }
+  .orn { text-align: center; color: var(--muted); font-family: var(--f-mono); margin: 24px 0; max-width: 68ch; }
+
+  /* Kurzfassung: blendet Fließtext aus, Thesen, Zitate, Karten und Grafiken bleiben */
+  main.short .body > p:not(.keep), main.short .orn { display: none; }
+  .short-note { display: none; font-family: var(--f-ui); font-size: 13px; color: var(--petrol); background: var(--petrol-soft); padding: 8px 12px; border-radius: 6px; margin-bottom: 20px; }
+  main.short .short-note { display: block; }
+
+  /* START */
+  .cover { padding-block: 8px 24px; }
+  .cover .meta { font-family: var(--f-mono); font-size: 12px; color: var(--muted); margin-top: 20px; letter-spacing: .06em; }
+  .toc { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 32px; }
+  .toc a {
+    display: grid; grid-template-columns: 40px 1fr auto; gap: 8px; align-items: baseline;
+    padding: 14px 16px; background: var(--surface); border: 1px solid var(--line); border-radius: 8px;
+    text-decoration: none; color: var(--ink); font-family: var(--f-ui); font-size: 15px; line-height: 1.35;
+  }
+  .toc a:hover { border-color: var(--petrol); }
+  .toc .rn { font-family: var(--f-mono); font-size: 12px; color: var(--accent); }
+  .toc small { display: block; color: var(--muted); font-size: 13px; margin-top: 2px; }
+  .toc .tag { font-size: 11px; font-family: var(--f-mono); color: var(--muted); }
+  .toc a.read .tag { color: var(--pos); }
+  .cta-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 28px; }
+
+  /* ZANGENBEWEGUNG */
+  .pincer { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 20px; margin: 28px 0; align-items: start; }
+  .pincer-fig { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px; overflow-x: auto; }
+  .pincer-fig svg { display: block; width: 100%; height: auto; min-width: 300px; }
+  .edge { fill: none; stroke: var(--line); stroke-width: 2.5; transition: stroke .2s, opacity .2s; }
+  .edge-label { font-family: var(--f-ui); font-size: 16px; fill: var(--muted); transition: fill .2s, opacity .2s; }
+  .arrow { fill: var(--line); }
+  .arrow-on { fill: var(--accent); }
+  .edge.on { stroke: var(--accent); }
+  .edge-label.on { fill: var(--accent); font-weight: 600; }
+  .dim { opacity: .3; }
+  .node { cursor: pointer; }
+  .node circle { fill: var(--paper); stroke: var(--petrol); stroke-width: 2; transition: fill .2s; }
+  .node text { font-family: var(--f-ui); fill: var(--ink); text-anchor: middle; pointer-events: none; }
+  .node .nl { font-family: var(--f-mono); font-size: 11px; fill: var(--muted); }
+  .node .nt { font-size: 17px; font-weight: 600; }
+  .node:hover circle, .node:focus-visible circle { fill: var(--petrol-soft); }
+  .node.on circle { fill: var(--petrol); }
+  .node.on text { fill: var(--surface); }
+  .node:focus { outline: none; }
+  .pincer-detail { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--petrol); border-radius: 8px; padding: 18px 20px; font-size: .95rem; line-height: 1.6; min-width: 0; }
+  .pincer-detail .eyebrow { margin-bottom: 6px; }
+  .pincer-detail h4 { margin-bottom: 8px; }
+  .pincer-detail p { margin: 0; }
+  .line-pick { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+
+  /* RASTER */
+  .grid3 { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 28px 0; }
+  .cell { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; font-size: .9rem; line-height: 1.55; }
+  .cell .eyebrow { margin-bottom: 6px; font-size: 10px; }
+  .cell b { display: block; font-family: var(--f-display); font-size: 1rem; margin-bottom: 6px; }
+
+  /* FORDERUNGEN */
+  .demands { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 28px 0; }
+  .demand { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px; display: flex; flex-direction: column; gap: 10px; min-width: 0; }
+  .demand.starred { border-color: var(--accent); box-shadow: inset 0 3px 0 var(--accent); }
+  .d-head { display: flex; align-items: center; gap: 10px; }
+  .d-num { font-family: var(--f-display); font-weight: 700; font-size: 1.6rem; line-height: 1; color: var(--accent); min-width: 1.4em; }
+  .d-field { font-family: var(--f-mono); font-size: 10px; letter-spacing: .18em; text-transform: uppercase; color: var(--muted); flex: 1; }
+  .star { border: 1px solid var(--line); background: transparent; border-radius: 6px; width: 32px; height: 32px; cursor: pointer; display: grid; place-items: center; color: var(--muted); }
+  .star svg { width: 16px; height: 16px; fill: none; stroke: currentColor; stroke-width: 1.6; }
+  .star[aria-pressed="true"] { color: var(--accent); border-color: var(--accent); }
+  .star[aria-pressed="true"] svg { fill: currentColor; }
+  .demand > p { font-size: .9rem; line-height: 1.6; color: var(--muted); margin: 0; flex: 1; }
+  .rate { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 4px; margin-top: 4px; }
+  .rate button {
+    font-family: var(--f-ui); font-size: 11px; line-height: 1.2; padding: 7px 2px; border-radius: 5px;
+    border: 1px solid var(--line); background: var(--paper); color: var(--muted); cursor: pointer;
+  }
+  .rate button:hover { border-color: var(--petrol); color: var(--ink); }
+  .rate button[aria-checked="true"][data-v="-2"], .rate button[aria-checked="true"][data-v="-1"] { background: var(--neg); border-color: var(--neg); color: var(--surface); }
+  .rate button[aria-checked="true"][data-v="0"] { background: var(--muted); border-color: var(--muted); color: var(--surface); }
+  .rate button[aria-checked="true"][data-v="1"], .rate button[aria-checked="true"][data-v="2"] { background: var(--pos); border-color: var(--pos); color: var(--surface); }
+  .rate-cap { font-family: var(--f-ui); font-size: 12px; color: var(--muted); }
+
+  /* ZEITLEISTE */
+  .timeline { margin: 28px 0; }
+  .tl-track { display: grid; grid-template-columns: 4fr 10fr 6fr; gap: 4px; }
+  .tl-track button {
+    text-align: left; border: 1px solid var(--line); background: var(--surface); cursor: pointer;
+    padding: 12px 14px; border-radius: 6px; font-family: var(--f-ui); min-width: 0;
+  }
+  .tl-track button b { display: block; font-family: var(--f-mono); font-size: 12px; color: var(--accent); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .tl-track button span { font-size: 14px; font-weight: 600; }
+  .tl-track button[aria-selected="true"] { background: var(--petrol); border-color: var(--petrol); color: var(--surface); }
+  .tl-track button[aria-selected="true"] b { color: var(--surface); }
+  .tl-panel { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--petrol); padding: 18px 22px; margin-top: 8px; border-radius: 0 8px 8px 0; }
+  .tl-panel p { margin: 0; }
+  .tl-panel ul { margin: 10px 0 0; padding-left: 20px; font-size: .95rem; }
+
+  /* ABSCHLUSS-THESE */
+  .final { background: var(--petrol-soft); border-top: 3px solid var(--accent); padding: 32px 28px; margin: 36px 0; border-radius: 0 0 8px 8px; }
+  .final p { font-family: var(--f-display); font-style: italic; font-size: clamp(1.1rem, 2.4vw, 1.4rem); line-height: 1.55; margin: 0; }
+  .final strong { font-style: normal; color: var(--accent); }
+  .basis { border-top: 1px solid var(--line); padding-top: 24px; margin-top: 40px; font-size: .9rem; color: var(--muted); display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 28px; }
+  .basis ul { list-style: none; margin: 0; padding: 0; font-family: var(--f-mono); font-size: 12px; line-height: 2; }
+
+  /* KAPITEL-FUSS */
+  .ch-foot { margin-top: 48px; border-top: 1px solid var(--line); padding-top: 24px; display: flex; flex-direction: column; gap: 16px; font-family: var(--f-ui); }
+  .ch-foot label.chk { display: inline-flex; gap: 8px; align-items: center; font-size: 14px; cursor: pointer; }
+  .ch-foot input[type="checkbox"] { width: 18px; height: 18px; accent-color: var(--pos); }
+  .note-lab { font-size: 13px; color: var(--muted); display: block; margin-bottom: 6px; }
+  textarea { width: 100%; min-height: 84px; resize: vertical; border: 1px solid var(--line); background: var(--surface); border-radius: 6px; padding: 10px 12px; font-family: var(--f-read); font-size: 15px; line-height: 1.5; }
+  .pager { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+  .pager .btn { max-width: 100%; }
+
+  /* POSITION */
+  .pos-sum { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 24px 0; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; font-family: var(--f-ui); }
+  .stat b { display: block; font-family: var(--f-display); font-size: 1.8rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .pos-list { display: flex; flex-direction: column; gap: 6px; margin: 16px 0 32px; }
+  .pos-row { display: grid; grid-template-columns: 28px minmax(0, 1fr) 160px; gap: 12px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 10px 14px; font-family: var(--f-ui); font-size: 14px; line-height: 1.35; }
+  .pos-row a { color: var(--ink); text-decoration: none; }
+  .pos-row a:hover { text-decoration: underline; }
+  .pos-row .d-num { font-size: 1.15rem; }
+  .pos-row small { display: block; color: var(--muted); font-size: 12px; }
+  .bar { position: relative; height: 18px; background: linear-gradient(var(--line), var(--line)) center / 1px 100% no-repeat; }
+  .bar i { position: absolute; top: 3px; height: 12px; border-radius: 2px; }
+  .bar .lbl { position: absolute; inset: 0; display: grid; place-items: center; font-size: 11px; color: var(--muted); font-style: italic; }
+  .pos-notes { display: flex; flex-direction: column; gap: 10px; }
+  .pos-notes article { background: var(--surface); border: 1px solid var(--line); border-radius: 6px; padding: 12px 16px; font-size: .95rem; white-space: pre-wrap; }
+  .pos-notes article b { display: block; font-family: var(--f-ui); font-size: 12px; color: var(--accent); letter-spacing: .05em; margin-bottom: 4px; white-space: normal; }
+  .empty { font-family: var(--f-ui); font-size: 14px; color: var(--muted); background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; padding: 18px; }
+  .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--paper); font-family: var(--f-ui); font-size: 14px; padding: 10px 16px; border-radius: 6px; z-index: 30; }
+  #copyFallback { margin-top: 12px; min-height: 200px; font-family: var(--f-mono); font-size: 12px; }
+
+  /* RESPONSIV */
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: minmax(0, 1fr); gap: 0; }
+    .rail { position: sticky; top: calc(env(safe-area-inset-top, 0px) + var(--topbar-h, 60px)); z-index: 15; background: var(--paper); padding-block: 8px; margin: 0 calc(-1 * var(--gutter-r)) 0 calc(-1 * var(--gutter-l)); padding-left: var(--gutter-l); padding-right: var(--gutter-r); border-bottom: 1px solid var(--line); overflow-x: auto; scrollbar-width: none; }
+    .rail::-webkit-scrollbar { display: none; }
+    .rail ol { flex-direction: row; gap: 6px; width: max-content; }
+    .rail a { grid-template-columns: auto auto 10px; white-space: nowrap; padding: 6px 10px; border: 1px solid var(--line); background: var(--surface); }
+    .rail .sep { width: 1px; height: auto; margin: 0 4px; }
+    main { padding-block: 28px 64px; }
+    .pincer { grid-template-columns: minmax(0, 1fr); }
+  }
+  @media (max-width: 640px) {
+    .progress-track { width: 70px; }
+    .toc, .demands, .grid3, .pos-sum, .basis { grid-template-columns: minmax(0, 1fr); }
+    .tl-track { grid-template-columns: minmax(0, 1fr); }
+    .pos-row { grid-template-columns: 24px minmax(0, 1fr); }
+    .pos-row .bar { grid-column: 1 / -1; }
+    .thesis { padding: 20px; }
+    .final { padding: 24px 20px; }
+  }
+</style>
+
+<header class="topbar" id="topbar">
+  <div class="topbar-inner">
+    <a class="brand" href="#start">
+      <b>Uns neu umeinander kümmern</b>
+      <small>Manifest · Entwurf Oktober 2026</small>
+    </a>
+    <div class="progress" title="Gelesene Kapitel">
+      <div class="progress-track"><div class="progress-fill" id="progFill"></div></div>
+      <span id="progText">0 / 8</span>
+    </div>
+    <div class="tools">
+      <button class="btn" id="shortBtn" type="button" aria-pressed="false">Kurzfassung</button>
+      <a class="btn primary" href="#position">Meine Position</a>
+    </div>
+  </div>
+</header>
+
+<div class="shell">
+  <nav class="rail" aria-label="Kapitel">
+    <ol id="railList"></ol>
+  </nav>
+
+  <main id="main">
+    <p class="short-note">Kurzfassung aktiv: Es werden nur Thesen, Zitate, Forderungen und Grafiken gezeigt.</p>
+
+    <!-- START -->
+    <section class="view" id="v-start" data-view="start">
+      <div class="cover">
+        <p class="eyebrow">Politisches Manifest · Entwurf</p>
+        <h1>Uns neu umeinander kümmern. <em>Für eine Soziale Marktwirtschaft des 21. Jahrhunderts</em></h1>
+        <p class="lede" style="margin-top:24px">Ein Manifest auf der Grundlage der Langzeitanalyse wirtschaftlicher Entwicklung, ökologischer Transformation und sozialer Neubegründung.</p>
+        <p class="meta">Oktober 2026 · Entwurfsfassung zur Diskussion · 8 Kapitel · 8 Forderungen</p>
+        <div class="cta-row">
+          <a class="btn primary" id="startBtn" href="#diagnose">Lesen beginnen</a>
+          <a class="btn" href="#forderungen">Direkt zu den Forderungen</a>
+        </div>
+      </div>
+      <p class="eyebrow" style="margin-top:40px">So funktioniert die App</p>
+      <p style="font-family:var(--f-ui);font-size:15px;color:var(--muted)">Lesen Sie Kapitel für Kapitel, bewerten Sie jede Forderung und halten Sie eigene Notizen fest. Unter „Meine Position“ sehen Sie Ihre Haltung auf einen Blick und können sie als Text kopieren. Alles bleibt in Ihrem Browser gespeichert.</p>
+      <div class="toc" id="toc"></div>
+    </section>
+
+    <!-- I. DIAGNOSE -->
+    <section class="view" id="v-diagnose" data-view="diagnose" hidden>
+      <p class="eyebrow">I · Diagnose</p>
+      <h2>Das Modell hat seinen historischen Entwicklungspfad erschöpft</h2>
+      <div class="body">
+        <p>Die Soziale Marktwirtschaft, wie wir sie kennen, war eine Antwort auf die Bedingungen des 20. Jahrhunderts: Wiederaufbau, Vollbeschäftigung, stabiles Wachstum, überschaubare Risiken. Sie hat funktioniert — unter jenen Bedingungen. Diese Bedingungen existieren nicht mehr.</p>
+        <p>Wir stehen vor einer dreifachen Erschütterung, die kein Konjunkturphänomen ist, sondern eine strukturelle Zäsur. Sie verlangt keine Reparatur des Bestehenden, sondern eine Neubegründung.</p>
+      </div>
+
+      <div class="pincer">
+        <div class="pincer-fig">
+          <svg viewBox="0 0 600 400" role="group" aria-label="Die drei Krisenlinien und ihre Wechselwirkungen">
+            <defs>
+              <marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow" d="M0,0 L10,5 L0,10 z"/></marker>
+              <marker id="ah-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse"><path class="arrow-on" d="M0,0 L10,5 L0,10 z"/></marker>
+            </defs>
+            <path class="edge" data-from="p" data-to="k" d="M165,300 Q300,230 435,300" marker-end="url(#ah)"/>
+            <path class="edge" data-from="k" data-to="p" d="M435,322 Q300,392 165,322" marker-end="url(#ah)"/>
+            <path class="edge" data-from="p" data-to="w" d="M135,262 L262,118" marker-end="url(#ah)"/>
+            <path class="edge" data-from="k" data-to="w" d="M465,262 L338,118" marker-end="url(#ah)"/>
+            <text class="edge-label" data-from="p" data-to="k" x="300" y="252" text-anchor="middle">schwächt Reaktionsfähigkeit</text>
+            <text class="edge-label" data-from="k" data-to="p" x="300" y="382" text-anchor="middle">vertieft Stagnation</text>
+            <text class="edge-label" data-from="p" data-to="w" x="168" y="168" text-anchor="end">untergräbt</text>
+            <text class="edge-label" data-from="p" data-to="w" x="168" y="186" text-anchor="end">Finanzierung</text>
+            <text class="edge-label" data-from="k" data-to="w" x="432" y="168">untergräbt</text>
+            <text class="edge-label" data-from="k" data-to="w" x="432" y="186">Finanzierung</text>
+            <g class="node" data-node="w" tabindex="0" role="button" aria-label="Linie 3: Wohlfahrt">
+              <circle cx="300" cy="80" r="50"/><text class="nl" x="300" y="70">LINIE 3</text><text class="nt" x="300" y="92">Wohlfahrt</text>
+            </g>
+            <g class="node" data-node="p" tabindex="0" role="button" aria-label="Linie 1: Profitabilität">
+              <circle cx="110" cy="310" r="56"/><text class="nl" x="110" y="300">LINIE 1</text><text class="nt" x="110" y="322">Profitabilität</text>
+            </g>
+            <g class="node" data-node="k" tabindex="0" role="button" aria-label="Linie 2: Klima">
+              <circle cx="490" cy="310" r="56"/><text class="nl" x="490" y="300">LINIE 2</text><text class="nt" x="490" y="322">Klima</text>
+            </g>
+          </svg>
+        </div>
+        <div class="pincer-detail" id="pincerDetail" aria-live="polite"></div>
+      </div>
+
+      <div class="thesis">
+        <p>Diese drei Linien sind nicht getrennte Krisen. Sie sind <strong>eine strukturelle Zangenbewegung</strong>: Die Stagnationstendenzen schwächen die Reaktionsfähigkeit auf den Klimawandel — der Klimawandel vertieft die Stagnationstendenzen — beide zusammen untergraben die Finanzierungsbasis des Wohlfahrtsstaats.</p>
+      </div>
+    </section>
+
+    <!-- II. ERSCHÖPFUNG -->
+    <section class="view" id="v-erschoepfung" data-view="erschoepfung" hidden>
+      <p class="eyebrow">II · Die Erschöpfung des alten Modells</p>
+      <h2>Was nicht mehr funktioniert — und warum</h2>
+      <div class="body">
+        <p class="keep">Das Erhard'sche Versprechen lautete: Wachstum erzeugt Wohlstand, Wohlstand finanziert soziale Sicherung, soziale Sicherung legitimiert das System. Diese Formel ist historisch erschöpft.</p>
+        <div class="quote"><p>»Eine Gesellschaft, die Stabilität mit Widerstandsfähigkeit verwechselt, verwechselt Komfort mit Zukunftsfähigkeit.«</p></div>
+        <p>Die Investitionsquote in Deutschland und Europa sinkt seit Jahrzehnten — nicht weil Kapital fehlt, sondern weil ausreichend profitable Anlagemöglichkeiten in der Realwirtschaft ausbleiben. Das Kapital weicht in Finanzanlagen, Aktienrückkäufe, Immobilienspekulation aus. Es akkumuliert sich — ohne produktive Wirkung.</p>
+        <p>Gleichzeitig hat die Klimapolitik eine strukturelle Regressivität produziert: Energiesteuern und CO₂-Bepreisung belasten einkommensärmere Haushalte überproportional. Klimaschutz ohne Sozialkorrektur ist kein Fortschritt — er ist eine neue Form sozialer Ungerechtigkeit.</p>
+        <p>Und der Wohlfahrtsstaat selbst? Er wurde entworfen, um standardisierte Risiken standardisiert zu versichern: Krankheit, Alter, Arbeitslosigkeit. Er hat keine institutionelle Antwort auf strukturelle Vulnerabilität: auf den Verlust des Arbeitsplatzes durch Extremwetter, auf Hitzekrankheiten älterer Alleinlebender, auf Klimamigration, auf die Entwertung ganzer Regionen durch den ökologischen Strukturwandel.</p>
+        <div class="orn">§</div>
+        <p class="keep">Das bismarcksche Äquivalenzprinzip — Beitrag gegen Anspruch, Erwerbsarbeit gegen Sicherung — verliert seine Funktionsfähigkeit in dem Maß, in dem Klimaschäden Risiken erzeugen, die weder versicherbar noch individuell zurechenbar sind.</p>
+      </div>
+    </section>
+
+    <!-- III. ZANGENBEWEGUNG -->
+    <section class="view" id="v-zangenbewegung" data-view="zangenbewegung" hidden>
+      <p class="eyebrow">III · Die fiskalische Zangenbewegung</p>
+      <h2>Der Staat kann nicht gleichzeitig schrumpfen und transformieren</h2>
+      <div class="body">
+        <p class="keep">Deutschland benötigt nach konservativen Schätzungen 100 Milliarden Euro pro Jahr für Klimaneutralitätsinvestitionen — rund 2,5 Prozent des Bruttoinlandsprodukts. Gleichzeitig wächst der Bedarf an sozialen Sicherungsleistungen durch Klimafolgen, demographischen Wandel und Arbeitsmarktdisruption. Und die Steuerbasis stagniert.</p>
+        <div class="thesis"><p>Die Schuldenbremse in ihrer gegenwärtigen Form ist kein Instrument der Haushaltsdisziplin. Sie ist ein <strong>institutioneller Investitionsblockierer</strong> — der in einer Polykrise erzwingt, was er zu verhindern vorgibt: unkontrollierte Folgekosten durch aufgeschobene Transformation.</p></div>
+        <p>Wer heute nicht in Klimaschutz, Infrastruktur und Daseinsvorsorge investiert, zahlt morgen die Kosten physischer Klimaschäden, sozialer Erosion und politischer Destabilisierung. Das ist keine linke These — das ist Risikomanagement.</p>
+        <p class="keep">Die entscheidende verteilungspolitische Frage ist nicht, ob wir uns Transformation leisten können. Sie lautet: <em>Wer trägt die Kosten einer Transformation, die alle brauchen?</em> Die Antwort der Sozialen Marktwirtschaft des 21. Jahrhunderts muss lauten: nicht die, die sie am wenigsten verursacht haben.</p>
+      </div>
+    </section>
+
+    <!-- IV. FUNDAMENTE -->
+    <section class="view" id="v-fundamente" data-view="fundamente" hidden>
+      <p class="eyebrow">IV · Neue Fundamente</p>
+      <h2>Was die Neubegründung trägt</h2>
+      <div class="body">
+        <p class="keep">Eine Neubegründung der Sozialen Marktwirtschaft braucht ein anderes normatives Fundament als das des Nachkriegskapitalismus. Dieses Fundament heißt: <strong>Sorge</strong>.</p>
+        <p>Nicht im sentimentalen Sinn — sondern als strukturelle Kategorie. Was Menschen in Krisen stabilisiert, sind keine Transferleistungen allein: Es sind verlässliche Sorgeverhältnisse. Vertrauen. Nähe. Zusammenarbeit. Das sind keine weichen Faktoren — das sind die harten Bedingungen sozialer Resilienz.</p>
+        <div class="quote"><p>»Was wir brauchen, ist nicht mehr Markt und nicht mehr Staat. Wir brauchen mehr Fähigkeit, füreinander da zu sein — und Institutionen, die das ermöglichen statt verhindern.«</p></div>
+        <p>Eine Gesellschaft, die Sorgearbeit strukturell entwertet — durch fehlende Zeit, fehlende Infrastruktur, fehlende Anerkennung —, produziert nicht nur individuelle Not. Sie produziert kollektive Fragilität. Sie ist nicht resilienzfähig gegenüber Krisen, die sie nicht vorhersehen konnte. Und sie wird die Transformationsaufgaben des 21. Jahrhunderts nicht bestehen.</p>
+        <p class="keep">Die Neubegründung der Sozialen Marktwirtschaft fragt deshalb nicht nur: <em>Wie finanzieren wir soziale Sicherung?</em> Sie fragt: <em>Welche Art von Gesellschaft wollen wir sein?</em> Und sie antwortet: Eine, in der füreinander zu sorgen nicht Privatsache, sondern strukturell ermöglichte Gemeinschaftspraxis ist.</p>
+        <div class="orn">§</div>
+        <p>Das ist keine Absage an den Markt. Märkte sind unverzichtbare Koordinationsmechanismen. Aber sie brauchen — wie Ludwig Erhard und Walter Eucken wussten — einen ordnungspolitischen Rahmen. Dieser Rahmen muss heute neu gesetzt werden: nicht für die Bedingungen des Wirtschaftswunders, sondern für eine Ökonomie im Zeichen von Klimatransformation, demographischem Wandel und struktureller Stagnation.</p>
+      </div>
+    </section>
+
+    <!-- V. FORDERUNGEN -->
+    <section class="view" id="v-forderungen" data-view="forderungen" hidden>
+      <p class="eyebrow">V · Politische Forderungen</p>
+      <h2>Sechs Handlungsfelder für eine Neubegründung</h2>
+      <div class="body">
+        <p class="keep">Aus der Analyse ergeben sich sechs konkrete Handlungsfelder. Sie sind nicht voneinander trennbar. Sie bilden ein Ensemble. Bewerten Sie jede Forderung und markieren Sie mit dem Stern Ihre Prioritäten.</p>
+      </div>
+      <div class="demands">
+        <article class="demand" data-id="d1"><div class="d-head"><span class="d-num">1</span><span class="d-field">Investitionsregime</span></div>
+          <h4>Öffentliche Investitionslogik jenseits der Schuldenbremse</h4>
+          <p>Private Investitionen können die Transformation nicht allein tragen. Eine dauerhaft wirksame öffentliche Investitionsarchitektur — europäische Investitionsunion, nationale Entwicklungsbanken, zweckgebundene Sondervermögen — ist keine Ausnahme. Sie ist Normalzustand.</p></article>
+        <article class="demand" data-id="d2"><div class="d-head"><span class="d-num">2</span><span class="d-field">Eigentumsordnung</span></div>
+          <h4>Verbreiterung der Kapitalbasis durch gemeinwirtschaftliche Formen</h4>
+          <p>Genossenschaften, Gemeindewerke, Stiftungsmodelle in Energie, Wohnen, Pflege und digitaler Infrastruktur. Nicht Verstaatlichung — aber eine bewusste Ordnungspolitik, die Marktversagen in Transformationssektoren durch gemeinwirtschaftliche Alternativen korrigiert.</p></article>
+        <article class="demand" data-id="d3"><div class="d-head"><span class="d-num">3</span><span class="d-field">Soziale Sicherung</span></div>
+          <h4>Solidarisches Grundeinkommen — Existenzsicherung jenseits der Lohnarbeit</h4>
+          <p>Ein lebensphasensensibles Solidarisches Grundeinkommen entkoppelt Existenzsicherung von Erwerbsarbeit. Es ist die strukturelle Voraussetzung für Sorgekapazität: Wer seine Existenz nicht permanent am Arbeitsmarkt verteidigen muss, kann füreinander sorgen.</p></article>
+        <article class="demand" data-id="d4"><div class="d-head"><span class="d-num">4</span><span class="d-field">Daseinsvorsorge</span></div>
+          <h4>Infrastruktur der Fürsorge — Zeit, Raum, Gemeinschaft</h4>
+          <p>Pflege, Bildung, Gesundheit und Gemeinschaft sind keine Restposten nach Marktversorgung. Sie sind Kern öffentlicher Daseinsvorsorge. Dazu gehört Arbeitszeitverkürzung als strukturelle Voraussetzung für Zeit zur Sorge.</p></article>
+        <article class="demand" data-id="d5"><div class="d-head"><span class="d-num">5</span><span class="d-field">Klimagerechtigkeit</span></div>
+          <h4>Klimapolitik als Sozialpolitik — von Anfang an</h4>
+          <p>CO₂-Bepreisung ohne Sozialkorrektur ist regressiv. Klimapolitik und Sozialpolitik müssen institutionell verzahnt werden — nicht nachgelagert, sondern als gemeinsames Reformprojekt. Wer am wenigsten emittiert, darf nicht am meisten zahlen.</p></article>
+        <article class="demand" data-id="d6"><div class="d-head"><span class="d-num">6</span><span class="d-field">Wohlstandsbegriff</span></div>
+          <h4>Jenseits des BIP — Wohlstand als sozialer Qualitätsbegriff</h4>
+          <p>Wohlstandsindikatoren, die Sorgeverhältnisse, ökologische Stabilität und gesellschaftliche Teilhabe messen, müssen Eingang in Haushaltspolitik und Investitionsplanung finden. Wachstum ist Mittel, nicht Zweck.</p></article>
+      </div>
+      <p style="font-family:var(--f-ui);font-size:14px;color:var(--muted)">Die Forderungen 7 und 8 zur KI-Governance folgen in <a href="#ki">Kapitel VI</a>.</p>
+    </section>
+
+    <!-- VI. KI -->
+    <section class="view" id="v-ki" data-view="ki" hidden>
+      <p class="eyebrow">VI · Digitale Allmende und KI-Governance</p>
+      <h2>Künstliche Intelligenz — Testfall der Neubegründung</h2>
+      <div class="body">
+        <p>Am 25. Mai 2026 veröffentlichte Papst Leo XIV. seine erste Enzyklika <em>Magnifica humanitas</em> — bezeichnenderweise zum 135. Jahrestag von <em>Rerum novarum</em>, dem Gründungsdokument der katholischen Soziallehre als Antwort auf die Industrielle Revolution. Die Parallele ist keine historische Koinzidenz. Sie ist ein Urteil: Die Künstliche Intelligenz ist für das 21. Jahrhundert, was die Dampfmaschine für das 19. war — ein technologischer Umbruch, der die soziale Frage neu stellt.</p>
+        <div class="thesis"><p>Leo XIV. formuliert es direkt: <strong>„In der Zeit der Künstlichen Intelligenz, in der die Menschenwürde aufgrund neuer Formen von Entmenschlichung in den Hintergrund zu treten droht, haben wir die dringende Pflicht, zutiefst menschlich zu bleiben."</strong></p></div>
+        <p>Das ist kein frommer Appell. Es ist eine strukturelle Diagnose, die mit den Befunden der Politökonomie konvergiert: KI verändert nicht nur Produktionsprozesse — sie verändert das Verhältnis von Kapital und Arbeit, von Macht und Ohnmacht, von Würde und Verwertbarkeit.</p>
+        <h3><span>1 ·</span>Das Eigentumsproblem der KI</h3>
+        <p>KI ist gesellschaftlich erzeugtes Wissen — aus Milliarden menschlicher Interaktionen, Texte, Entscheidungen destilliert. Es wird privatwirtschaftlich angeeignet und als Kapital verwandt. <em>Magnifica humanitas</em> benennt dies als das Kernproblem: KI dürfe nicht durch einige wenige Technologiemilliardäre kontrolliert werden. Das Dokument warnt vor den <strong>„neuen seltenen Erden der Macht"</strong> — Gesundheitsdaten, demographische Daten, Verhaltensdaten, die für Investitionsstrategien genutzt werden.</p>
+        <p class="keep">Politökonomisch übersetzt: KI ist die bisher reinste Ausdrucksform des marxschen <em>Allgemeinen Intellekts</em> — das akkumulierte Wissen der Gesellschaft, in Privateigentum eingeschlossen. Die ordnungspolitische Antwort kann nur lauten: <strong>Digitale Allmende</strong> statt privater Monopolisierung.</p>
+        <h3><span>2 ·</span>Die Würde der Arbeit</h3>
+        <p>Die Enzyklika hält fest: <em>„Arbeit ist nicht einfach ein Instrument; sie drückt die Würde unseres Lebens aus und stärkt sie — eine Notwendigkeit des Menschseins, ein normaler Weg zur Reife."</em> Das ist keine romantische Verklärung von Arbeit. Es ist die Warnung vor einer Ökonomie, die Arbeit als reinen Kostenfaktor behandelt, der durch Automatisierung zu minimieren ist.</p>
+        <p class="keep">Wenn KI Arbeit substituiert, ohne dass die gesellschaftlichen Gewinne rückverteilt werden, entsteht keine Befreiung von Arbeit — es entsteht Ausschluss von Würde. Das Solidarische Grundeinkommen ist in diesem Licht nicht nur ein sozialpolitisches Instrument, sondern eine anthropologische Notwendigkeit: Es sichert Würde unabhängig von Verwertbarkeit.</p>
+        <h3><span>3 ·</span>Öffentliche Kontrolle als Gebot</h3>
+        <p>Leo XIV. fordert eine gerechte soziale Ordnung im digitalen Zeitalter: <em>„Eine, die allen einen gleichberechtigten Zugang zu Chancen garantiert, die Jüngsten und Fragilsten schützt, Hass und Desinformation bekämpft und die Nutzung von Daten und Technologien einer öffentlichen Kontrolle unterwirft — damit nicht der bloße Profit zum Maßstab wird, sondern die Würde eines jeden Menschen und das Wohl der Völker."</em></p>
+        <p>Und er ruft die Regulierungsbehörden weltweit dazu auf, sich vom BIP abzuwenden und einen neuen Maßstab für allgemeines Wohlergehen einzuführen — eine Forderung, die sich unmittelbar mit dem sechsten Handlungsfeld dieses Manifests deckt.</p>
+      </div>
+      <div class="demands">
+        <article class="demand" data-id="d7"><div class="d-head"><span class="d-num">7</span><span class="d-field">KI-Governance</span></div>
+          <h4>Digitale Allmende — KI als Gemeingut</h4>
+          <p>KI-Systeme, die auf gesellschaftlich erzeugten Daten basieren, dürfen nicht Privateigentum weniger Konzerne sein. Öffentliche KI-Infrastruktur, Datentreuhänder, genossenschaftliche Plattformmodelle. Die Gewinne der Automatisierung gehören der Gesellschaft — als KI-Dividende, als Arbeitszeitverkürzung, als Investition in Sorgeinfrastruktur.</p></article>
+        <article class="demand" data-id="d8"><div class="d-head"><span class="d-num">8</span><span class="d-field">Menschenwürde</span></div>
+          <h4>KI entwaffnen — Würde vor Verwertbarkeit</h4>
+          <p>KI darf nicht zur Überwachung, Kontrolle und Disziplinierung von Arbeit eingesetzt werden. Sie muss Sorgearbeit entlasten, nicht ersetzen. Militärische KI-Autonomie ist abzulehnen. Der Maßstab jeder KI-Anwendung ist die Frage: Stärkt sie menschliche Würde und Handlungsfähigkeit — oder untergräbt sie diese?</p></article>
+      </div>
+      <div class="quote"><p>»Rerum novarum antwortete auf die Dampfmaschine. Magnifica humanitas antwortet auf die KI. Das Manifest antwortet auf beides — mit einer Ordnung, die Würde vor Gewinn stellt.«</p></div>
+    </section>
+
+    <!-- VII. LANGER LAUF -->
+    <section class="view" id="v-lauf" data-view="lauf" hidden>
+      <p class="eyebrow">VII · Zeitdimension der Transformation</p>
+      <h2>Der lange Lauf — Rahmenplan einer anderen Veränderungslogik</h2>
+      <div class="body">
+        <p>Dieses Manifest formuliert Forderungen. Aber es wäre unehrlich, wenn es verschwiege, wie Veränderung wirklich geschieht — und wie lange sie dauert. Wer den gesellschaftlichen Umbau, der hier skizziert wird, als politisches Projekt der nächsten Legislaturperiode versteht, hat das Wesentliche nicht verstanden.</p>
+        <p class="keep">Klaus Bremen nennt die Dimension, um die es geht, den <strong>„langen Lauf"</strong>: die historische Übergangsphase in das Zeitalter der Klima- und Naturveränderungen. Gemeint ist kein kurzfristiger Krisenmodus, sondern ein jahrzehntelanger gesellschaftlicher Transformationsprozess, in dem Menschen lernen müssen, unter dauerhaft veränderten ökologischen, sozialen und ökonomischen Bedingungen zu leben. Der lange Lauf ist zugleich eine Belastungsprobe für Demokratie, Sozialstaat und gesellschaftlichen Zusammenhalt.</p>
+        <div class="thesis"><p>Der lange Lauf entsteht daraus, dass Klima- und Naturveränderungen nicht mehr als vorübergehende Ausnahme verstanden werden können. <strong>Gesellschaften müssen lernen, dauerhaft unter Bedingungen von Unsicherheit, Krisenhäufung und tiefgreifendem Wandel handlungsfähig zu bleiben.</strong></p></div>
+
+        <h3><span>1 ·</span>Keine Blaupause — eine Lernbewegung</h3>
+        <p>Bremen weist den großen politischen Durchgriff ausdrücklich zurück. Im Kapitel „Wie handeln?" kritisiert er die Vorstellung, Gesellschaft lasse sich „wie eine Kiste neu zimmern". Veränderung ist nicht Revolution und nicht Masterplan. Sie ist:</p>
+      </div>
+      <div class="grid3">
+        <div class="cell"><p class="eyebrow">Zeitlich</p><b>Langfristig und schrittweise</b>Wirksame Transformation vollzieht sich in Jahrzehnten, nicht in Wahlperioden. Sie braucht Kontinuität über politische Konjunkturen hinaus.</div>
+        <div class="cell"><p class="eyebrow">Epistemisch</p><b>Experimentell und lernorientiert</b>Kein Modell kann die Komplexität des Wandels antizipieren. Gesellschaftliche Transformation ist ein Prozess kollektiver Erfahrungsbildung.</div>
+        <div class="cell"><p class="eyebrow">Politisch</p><b>Demokratisch und prozesshaft</b>Autoritäre Steuerung scheitert langfristig, weil nachhaltige Veränderungen gelernt und sozial getragen werden müssen — nicht verordnet.</div>
+      </div>
+      <div class="body">
+        <h3><span>2 ·</span>François Jullien und die Logik des günstigen Moments</h3>
+        <p>Mit Bezug auf den Philosophen François Jullien und antikes chinesisches Denken entwickelt Bremen eine alternative Veränderungstheorie: Wirksame Transformation entsteht nicht primär durch heroische Eingriffe von oben, sondern dadurch, <em>günstige Entwicklungstendenzen früh wahrzunehmen und kontinuierlich zu verstärken.</em> Veränderung „erstreckt sich in der Dauer".</p>
+        <div class="quote"><p>»Nicht der große Eingriff — sondern die beharrliche Stärkung dessen, was bereits in die richtige Richtung tendiert. Das ist die politische Kunst des langen Laufs.«</p></div>
+        <p>Übersetzt in die Sprache der Ordnungspolitik: Es geht nicht darum, das System zu überwältigen, sondern darum, die strukturellen Weichen so zu stellen, dass soziale Praxis sich schrittweise in Richtung Solidarität, Sorge und ökologischer Verantwortung verschiebt. Institutionen als Ermöglichungsräume — nicht als Verwaltungsapparate.</p>
+        <h3><span>3 ·</span>Fünf Dimensionen der Veränderung</h3>
+      </div>
+      <div class="demands">
+        <article class="demand"><div class="d-head"><span class="d-num">I</span><span class="d-field">Durch soziale Praxis</span></div><h4>Neue Erfahrungsräume statt Gesetze</h4><p>Der Sozialstaat soll Räume schaffen, in denen Menschen neue Gewohnheiten gegenseitiger Sorge praktisch einüben können — nicht primär durch Vorschriften, sondern durch gestaltete soziale Gelegenheiten.</p></article>
+        <article class="demand"><div class="d-head"><span class="d-num">II</span><span class="d-field">Durch reale Beziehungen</span></div><h4>Face-to-Face als gesellschaftlicher Lernort</h4><p>Selbsthilfegruppen, Netzwerke, soziale Dienstleistungen sind Orte gesellschaftlicher Lernprozesse. Gewohnheiten verändern sich nicht durch moralische Appelle, sondern durch soziale Einbettung.</p></article>
+        <article class="demand"><div class="d-head"><span class="d-num">III</span><span class="d-field">Durch Zeit</span></div><h4>Recht auf soziale Zeit</h4><p>Zeit ist selbst eine Voraussetzung von Transformation. Begegnung, Resonanz und Vertrauensbildung brauchen Zeit — die der Markt nicht produziert. Das Recht auf soziale Zeit ist daher ein sozialpolitisches Grundrecht.</p></article>
+        <article class="demand"><div class="d-head"><span class="d-num">IV</span><span class="d-field">Institutionell</span></div><h4>Weiterentwicklung statt Abschaffung</h4><p>Der bestehende Sozialstaat wird nicht abgeschafft, sondern auf eine neue Entwicklungsstufe gehoben. Reform als Kreationsprozess — nicht als Abbau, nicht als Neustart, sondern als kontinuierliche Weiterentwicklung.</p></article>
+      </div>
+      <div class="body">
+        <h3><span>4 ·</span>Der lange Lauf als Zeithorizont des Manifests</h3>
+        <p class="keep">Die sechs Handlungsfelder dieses Manifests sind keine kurzfristigen Programmpunkte. Sie sind Weichenstellungen für einen langen Lauf — Jahrzehnte gesellschaftlichen Umbaus, der auf mehreren Zeitebenen gleichzeitig stattfindet. Wählen Sie eine Phase:</p>
+      </div>
+      <div class="timeline">
+        <div class="tl-track" role="tablist" aria-label="Zeitebenen">
+          <button type="button" role="tab" id="tab-ph1" data-ph="0" aria-selected="true" aria-controls="tlPanel"><b>2026–2030</b><span>Kurzfristig</span></button>
+          <button type="button" role="tab" id="tab-ph2" data-ph="1" aria-selected="false" aria-controls="tlPanel"><b>2030–2040</b><span>Mittelfristig</span></button>
+          <button type="button" role="tab" id="tab-ph3" data-ph="2" aria-selected="false" aria-controls="tlPanel"><b>2040+</b><span>Langfristig</span></button>
+        </div>
+        <div class="tl-panel" id="tlPanel" role="tabpanel" aria-live="polite"></div>
+      </div>
+      <div class="body">
+        <p class="keep">Das ist keine Entschuldigung für Zögerlichkeit. Weichenstellungen müssen jetzt erfolgen — weil der lange Lauf bereits begonnen hat. Die Frage ist nicht, ob er stattfindet. Die Frage ist, ob wir ihn gestalten oder erleiden.</p>
+      </div>
+    </section>
+
+    <!-- VIII. VISION -->
+    <section class="view" id="v-vision" data-view="vision" hidden>
+      <p class="eyebrow">VIII · Vision</p>
+      <h2>Was wir anstreben</h2>
+      <div class="body">
+        <p>Wir streben keine Rückkehr an. Nicht zum Wirtschaftswunder, nicht zur Vollbeschäftigungsgesellschaft der 1960er, nicht zur sozialen Sicherheit der alten Bundesrepublik. Diese Welt ist vorbei. Wir streben einen Aufbruch an.</p>
+        <p>Eine Gesellschaft, in der das Sorgen füreinander nicht gegen Erwerbsarbeit ausgespielt wird. In der Transformation als gemeinsame Aufgabe und nicht als individuelle Zumutung verstanden wird. In der ökologische Grenzen als Bedingung und nicht als Fessel begriffen werden.</p>
+        <p>Eine Wirtschaftsordnung, die Märkte als Instrumente einsetzt — nicht als Götzen verehrt. Die öffentliche Güter schützt, weil sie weiß, dass der Markt sie nicht produzieren kann. Die soziale Ungleichheit begrenzt, weil sie weiß, dass Demokratie ohne materielle Grundlage brüchig ist.</p>
+      </div>
+      <div class="final">
+        <p class="eyebrow">Die zentrale These</p>
+        <p>Die Neubegründung der Sozialen Marktwirtschaft erfordert den Übergang von einer <strong>wachstumsfinanzierten Umverteilungslogik</strong> zu einer <strong>sorgebasierten Infrastrukturlogik</strong> — getragen von öffentlichen Investitionen, verbreiterten Eigentumsformen und einer Wohlstandsdefinition, die ökologische Grenzen und soziale Bedarfe als konstitutiv begreift — nicht als Korrekturposten.</p>
+      </div>
+      <div class="basis">
+        <div>
+          <p class="eyebrow">Grundlage und Methode</p>
+          <p>Dieses Manifest gründet auf der politökonomischen Langzeitanalyse wirtschaftlicher Entwicklung im 21. Jahrhundert: dem empirischen Befund zur Profitratendynamik (Roberts, Kliman, Rotta/Kumar), der Klimafolgenforschung (Nature Climate Change, EZB, OECD) sowie der wohlfahrtsstaatlichen Transformationsforschung (Journal of Social Policy, Cambridge Core). Die normative Grundlage bildet das Konzept der Sorge als struktureller Kategorie, entwickelt in Anlehnung an Klaus Bremen, <em>Uns neu umeinander kümmern</em> (oekom Verlag, 2025).</p>
+        </div>
+        <div>
+          <p class="eyebrow">Analytische Stränge</p>
+          <ul><li>Marxsche Politökonomie</li><li>Klimafolgenforschung</li><li>Wohlfahrtsstaatstheorie</li><li>Ökosoziale Transformation</li><li>Sorge-Ökonomie</li><li>Ordnungspolitik</li></ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- MEINE POSITION -->
+    <section class="view" id="v-position" data-view="position" hidden>
+      <p class="eyebrow">Auswertung</p>
+      <h2>Meine Position zum Manifest</h2>
+      <p style="font-family:var(--f-ui);font-size:15px;color:var(--muted)">Ihre Bewertungen, Prioritäten und Notizen aus allen Kapiteln. Die Daten liegen nur in diesem Browser.</p>
+      <div class="pos-sum" id="posSum"></div>
+      <p class="eyebrow">Die acht Forderungen</p>
+      <div class="pos-list" id="posList"></div>
+      <p class="eyebrow">Notizen</p>
+      <div class="pos-notes" id="posNotes"></div>
+      <div class="cta-row">
+        <button class="btn primary" type="button" id="copyBtn">Zusammenfassung kopieren</button>
+        <button class="btn danger" type="button" id="resetBtn">Alles zurücksetzen</button>
+      </div>
+      <textarea id="copyFallback" readonly hidden aria-label="Zusammenfassung zum Kopieren"></textarea>
+    </section>
+  </main>
+</div>
+
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+  const CH = [
+    { id: 'diagnose', n: 'I', t: 'Diagnose', s: 'Drei Krisenlinien' },
+    { id: 'erschoepfung', n: 'II', t: 'Erschöpfung', s: 'Was nicht mehr funktioniert' },
+    { id: 'zangenbewegung', n: 'III', t: 'Zangenbewegung', s: 'Schrumpfen und transformieren' },
+    { id: 'fundamente', n: 'IV', t: 'Neue Fundamente', s: 'Sorge als Kategorie' },
+    { id: 'forderungen', n: 'V', t: 'Forderungen', s: 'Sechs Handlungsfelder' },
+    { id: 'ki', n: 'VI', t: 'KI & Humanitas', s: 'Digitale Allmende' },
+    { id: 'lauf', n: 'VII', t: 'Langer Lauf', s: 'Zeithorizont der Transformation' },
+    { id: 'vision', n: 'VIII', t: 'Vision', s: 'Die zentrale These' }
+  ];
+  const SCALE = [
+    { v: -2, l: 'Lehne ab' }, { v: -1, l: 'Eher nein' }, { v: 0, l: 'Offen' },
+    { v: 1, l: 'Eher ja' }, { v: 2, l: 'Stimme zu' }
+  ];
+  const LINES = {
+    p: { n: 'Linie 1', t: 'Das Profitabilitätsproblem', x: 'Kapitalistisches Wachstum untergräbt durch Rationalisierung systematisch seine eigene Verwertungsbasis. Investitionsschwäche, Finanzialisierung und Stagnation sind keine Ausnahmen — sie sind strukturelle Normalität reifer Ökonomien.' },
+    k: { n: 'Linie 2', t: 'Das Klimaproblem', x: 'Der Klimawandel vernichtet Kapital und Produktivität durch physische Schäden. Er erzwingt Transformationsinvestitionen in einem Ausmaß, das ohne staatliche Koordination nicht mobilisierbar ist. Die ökologische Krise ist keine Umweltfrage — sie ist die soziale Frage des Jahrhunderts.' },
+    w: { n: 'Linie 3', t: 'Das Wohlfahrtsproblem', x: 'Der Wohlfahrtsstaat wurde auf Wachstum, Vollbeschäftigung und kalkulierbare Risiken gebaut. Alle drei Voraussetzungen erodieren gleichzeitig. Neue Sorgebedarfe entstehen, für die keine Institution zuständig ist und keine Logik greift.' }
+  };
+  const PHASES = [
+    { t: 'Strukturelle Weichenstellungen', i: ['Investitionsarchitektur', 'Grundeinkommensmodelle', 'KI-Regulierung', 'Klimasozialgesetz'], d: [1, 3, 7, 5] },
+    { t: 'Institutioneller Umbau', i: ['Neue Eigentumsformen', 'Sorgeinfrastruktur', 'Wohlstandsindikatoren in der Haushaltspolitik'], d: [2, 4, 6] },
+    { t: 'Kultureller Wandel', i: ['Neue Gewohnheiten', 'Veränderte Normalität des Sorgens', 'Demokratische Resilienz unter Dauerstress'], d: [] }
+  ];
+  const KEY = 'manifest-app-v1';
+  const blank = () => ({ read: {}, ratings: {}, prio: {}, notes: {}, short: false });
+  let S = blank();
+  try { const raw = localStorage.getItem(KEY); if (raw) S = Object.assign(blank(), JSON.parse(raw)); } catch (e) {}
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch (e) {} };
+
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+  const main = $('#main');
+
+  const DEMANDS = $$('.demand[data-id]').map(el => ({
+    id: el.dataset.id, n: $('.d-num', el).textContent, field: $('.d-field', el).textContent,
+    title: $('h4', el).textContent, chapter: el.closest('.view').dataset.view, el
+  }));
+
+  /* Kapitelleiste und Inhaltsverzeichnis */
+  $('#railList').innerHTML =
+    `<li><a href="#start" data-r="start"><span class="rn">○</span><span>Start</span><span></span></a></li>` +
+    CH.map(c => `<li><a href="#${c.id}" data-r="${c.id}"><span class="rn">${c.n}</span><span>${c.t}</span><span class="ok" aria-hidden="true"></span></a></li>`).join('') +
+    `<li class="sep" aria-hidden="true"></li><li><a href="#position" data-r="position"><span class="rn">→</span><span>Meine Position</span><span></span></a></li>`;
+  $('#toc').innerHTML = CH.map(c =>
+    `<a href="#${c.id}" data-r="${c.id}"><span class="rn">${c.n}</span><span>${c.t}<small>${c.s}</small></span><span class="tag"></span></a>`).join('');
+
+  /* Kapitel-Fuß mit Gelesen-Haken, Notiz und Blättern */
+  CH.forEach((c, i) => {
+    const prev = CH[i - 1], next = CH[i + 1];
+    const foot = document.createElement('div');
+    foot.className = 'ch-foot';
+    foot.innerHTML = `
+      <label class="chk"><input type="checkbox" id="read-${c.id}" data-read="${c.id}"> Kapitel ${c.n} als gelesen markieren</label>
+      <div><label class="note-lab" for="note-${c.id}">Meine Notiz zu Kapitel ${c.n}</label>
+      <textarea id="note-${c.id}" data-note="${c.id}" placeholder="Was überzeugt Sie, was fehlt, was würden Sie anders formulieren?"></textarea></div>
+      <div class="pager">
+        ${prev ? `<a class="btn" href="#${prev.id}">← ${prev.n} · ${prev.t}</a>` : `<a class="btn" href="#start">← Start</a>`}
+        ${next ? `<a class="btn primary" href="#${next.id}" data-next="${c.id}">${next.n} · ${next.t} →</a>` : `<a class="btn primary" href="#position" data-next="${c.id}">Meine Position →</a>`}
+      </div>`;
+    $(`#v-${c.id}`).appendChild(foot);
+  });
+
+  /* Bewertungsleisten und Sterne an jeder Forderung */
+  const starSvg = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/></svg>';
+  DEMANDS.forEach(d => {
+    const star = document.createElement('button');
+    star.type = 'button'; star.className = 'star'; star.dataset.star = d.id;
+    star.setAttribute('aria-label', `Forderung ${d.n} als Priorität markieren`);
+    star.innerHTML = starSvg;
+    $('.d-head', d.el).appendChild(star);
+    const rate = document.createElement('div');
+    rate.className = 'rate'; rate.setAttribute('role', 'radiogroup');
+    rate.setAttribute('aria-label', `Ihre Haltung zu Forderung ${d.n}`);
+    rate.innerHTML = SCALE.map(s => `<button type="button" role="radio" data-rate="${d.id}" data-v="${s.v}" aria-checked="false">${s.l}</button>`).join('');
+    d.el.appendChild(rate);
+  });
+
+  /* Zangenbewegung */
+  let sel = null;
+  function renderPincer() {
+    $$('.node').forEach(n => n.classList.toggle('on', n.dataset.node === sel));
+    $$('.edge, .edge-label').forEach(e => {
+      const on = sel && (e.dataset.from === sel || e.dataset.to === sel);
+      e.classList.toggle('on', !!on);
+      e.classList.toggle('dim', !!sel && !on);
+      if (e.tagName === 'path') e.setAttribute('marker-end', on ? 'url(#ah-on)' : 'url(#ah)');
+    });
+    const box = $('#pincerDetail');
+    if (!sel) {
+      box.innerHTML = `<p class="eyebrow">Drei Linien, eine Zange</p><h4>Wählen Sie eine Krisenlinie</h4>
+        <p>Tippen Sie auf einen Kreis. Die Grafik zeigt dann, wie diese Linie die beiden anderen verstärkt und von ihnen getroffen wird.</p>
+        <div class="line-pick">${Object.entries(LINES).map(([k, l]) => `<button class="btn" type="button" data-pick="${k}">${l.n}</button>`).join('')}</div>`;
+    } else {
+      const l = LINES[sel];
+      box.innerHTML = `<p class="eyebrow">${l.n}</p><h4>${l.t}</h4><p>${l.x}</p>
+        <div class="line-pick">${Object.entries(LINES).map(([k, x]) => `<button class="btn" type="button" data-pick="${k}" aria-pressed="${k === sel}">${x.n}</button>`).join('')}
+        <button class="btn" type="button" data-pick="">Alle zeigen</button></div>`;
+    }
+  }
+  const pick = k => { sel = (!k || k === sel) ? null : k; renderPincer(); };
+  $$('.node').forEach(n => {
+    n.addEventListener('click', () => pick(n.dataset.node));
+    n.addEventListener('keydown', e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); pick(n.dataset.node); } });
+  });
+  $('#pincerDetail').addEventListener('click', e => { const b = e.target.closest('[data-pick]'); if (b) pick(b.dataset.pick); });
+
+  /* Zeitleiste */
+  let ph = 0;
+  function renderPhase() {
+    $$('.tl-track button').forEach(b => b.setAttribute('aria-selected', String(+b.dataset.ph === ph)));
+    const p = PHASES[ph];
+    $('#tlPanel').setAttribute('aria-labelledby', `tab-ph${ph + 1}`);
+    const links = p.d.map(n => DEMANDS.find(d => d.n === String(n))).filter(Boolean)
+      .map(d => `<a href="#${d.chapter}">${d.n} · ${esc(d.field)}</a>`).join(', ');
+    $('#tlPanel').innerHTML = `<p><strong>${p.t}</strong></p><ul>${p.i.map(x => `<li>${x}</li>`).join('')}</ul>` +
+      (links ? `<p style="margin-top:10px;font-family:var(--f-ui);font-size:13px;color:var(--muted)">Bezug zu Forderungen: ${links}</p>` : '');
+  }
+  $$('.tl-track button').forEach(b => b.addEventListener('click', () => { ph = +b.dataset.ph; renderPhase(); }));
+  $('.tl-track').addEventListener('keydown', e => {
+    if (e.key !== 'ArrowRight' && e.key !== 'ArrowLeft') return;
+    ph = (ph + (e.key === 'ArrowRight' ? 1 : 2)) % 3; renderPhase(); $(`#tab-ph${ph + 1}`).focus();
+  });
+
+  /* Zustand in die Oberfläche übertragen */
+  function syncState() {
+    const nRead = CH.filter(c => S.read[c.id]).length;
+    $('#progFill').style.width = (nRead / CH.length * 100) + '%';
+    $('#progText').textContent = `${nRead} / ${CH.length}`;
+    $$('[data-r]').forEach(a => a.classList.toggle('read', !!S.read[a.dataset.r]));
+    $$('#toc .tag').forEach(t => { const r = t.parentElement.dataset.r; t.textContent = S.read[r] ? 'gelesen' : ''; });
+    $$('[data-read]').forEach(cb => cb.checked = !!S.read[cb.dataset.read]);
+    $$('[data-note]').forEach(t => { if (document.activeElement !== t) t.value = S.notes[t.dataset.note] || ''; });
+    $$('[data-rate]').forEach(b => b.setAttribute('aria-checked', String(S.ratings[b.dataset.rate] === +b.dataset.v)));
+    $$('[data-star]').forEach(b => {
+      const on = !!S.prio[b.dataset.star];
+      b.setAttribute('aria-pressed', String(on));
+      b.closest('.demand').classList.toggle('starred', on);
+    });
+    main.classList.toggle('short', !!S.short);
+    $('#shortBtn').setAttribute('aria-pressed', String(!!S.short));
+    const first = CH.find(c => !S.read[c.id]);
+    $('#startBtn').textContent = nRead === 0 ? 'Lesen beginnen' : first ? `Weiterlesen: ${first.n} · ${first.t}` : 'Zur Auswertung';
+    $('#startBtn').setAttribute('href', nRead === 0 ? '#diagnose' : first ? `#${first.id}` : '#position');
+  }
+
+  function renderPosition() {
+    const rated = DEMANDS.filter(d => S.ratings[d.id] !== undefined);
+    const agree = rated.filter(d => S.ratings[d.id] > 0).length;
+    const nRead = CH.filter(c => S.read[c.id]).length;
+    $('#posSum').innerHTML = `
+      <div class="stat"><b>${nRead}<span style="font-size:1rem"> / 8</span></b><span>Kapitel gelesen</span></div>
+      <div class="stat"><b>${rated.length}<span style="font-size:1rem"> / 8</span></b><span>Forderungen bewertet</span></div>
+      <div class="stat"><b>${agree}</b><span>mit Zustimmung</span></div>`;
+    const order = DEMANDS.slice().sort((a, b) => (!!S.prio[b.id] - !!S.prio[a.id]) || (a.n - b.n));
+    $('#posList').innerHTML = order.map(d => {
+      const v = S.ratings[d.id];
+      let bar;
+      if (v === undefined) bar = `<div class="bar"><span class="lbl">noch offen</span></div>`;
+      else if (v === 0) bar = `<div class="bar" title="Offen"><i style="left:calc(50% - 3px);width:6px;background:var(--muted)"></i></div>`;
+      else {
+        const w = Math.abs(v) * 25, col = v > 0 ? 'var(--pos)' : 'var(--neg)';
+        bar = `<div class="bar" title="${SCALE.find(s => s.v === v).l}"><i style="${v > 0 ? 'left:50%' : `left:${50 - w}%`};width:${w}%;background:${col}"></i></div>`;
+      }
+      const lab = v === undefined ? 'nicht bewertet' : SCALE.find(s => s.v === v).l;
+      return `<div class="pos-row"><span class="d-num">${d.n}</span>
+        <span><a href="#${d.chapter}">${esc(d.title)}</a><small>${S.prio[d.id] ? '★ Priorität · ' : ''}${esc(d.field)} · ${lab}</small></span>${bar}</div>`;
+    }).join('');
+    const notes = CH.filter(c => (S.notes[c.id] || '').trim());
+    $('#posNotes').innerHTML = notes.length
+      ? notes.map(c => `<article><b>${c.n} · ${c.t}</b>${esc(S.notes[c.id].trim())}</article>`).join('')
+      : `<div class="empty">Noch keine Notizen. Am Ende jedes Kapitels finden Sie ein Notizfeld.</div>`;
+  }
+
+  function summaryText() {
+    const L = ['Meine Position zum Manifest „Uns neu umeinander kümmern“', ''];
+    L.push(`Gelesen: ${CH.filter(c => S.read[c.id]).length} von 8 Kapiteln`, '');
+    L.push('Forderungen:');
+    DEMANDS.forEach(d => {
+      const v = S.ratings[d.id];
+      L.push(`${d.n}. ${d.title} — ${v === undefined ? 'nicht bewertet' : SCALE.find(s => s.v === v).l}${S.prio[d.id] ? ' (Priorität)' : ''}`);
+    });
+    const notes = CH.filter(c => (S.notes[c.id] || '').trim());
+    if (notes.length) { L.push('', 'Notizen:'); notes.forEach(c => L.push(`[${c.n} · ${c.t}] ${S.notes[c.id].trim()}`)); }
+    return L.join('\n');
+  }
+
+  /* Navigation */
+  const VIEWS = ['start', ...CH.map(c => c.id), 'position'];
+  function route() {
+    let id = location.hash.slice(1);
+    if (!VIEWS.includes(id)) id = 'start';
+    $$('.view').forEach(v => v.hidden = v.dataset.view !== id);
+    $$('.rail a').forEach(a => { if (a.dataset.r === id) a.setAttribute('aria-current', 'page'); else a.removeAttribute('aria-current'); });
+    const cur = $(`.rail a[data-r="${id}"]`);
+    if (cur && cur.scrollIntoView && window.matchMedia('(max-width: 900px)').matches) cur.scrollIntoView({ block: 'nearest', inline: 'center' });
+    if (id === 'position') renderPosition();
+    const ch = CH.find(c => c.id === id);
+    document.title = ch ? `${ch.n} · ${ch.t} — Manifest` : 'Manifest für eine Soziale Marktwirtschaft des 21. Jahrhunderts';
+    window.scrollTo({ top: 0 });
+  }
+  window.addEventListener('hashchange', route);
+
+  /* Ereignisse */
+  document.addEventListener('click', e => {
+    const r = e.target.closest('[data-rate]');
+    if (r) {
+      const v = +r.dataset.v, id = r.dataset.rate;
+      if (S.ratings[id] === v) delete S.ratings[id]; else S.ratings[id] = v;
+      save(); syncState(); return;
+    }
+    const st = e.target.closest('[data-star]');
+    if (st) { const id = st.dataset.star; if (S.prio[id]) delete S.prio[id]; else S.prio[id] = true; save(); syncState(); return; }
+    const nx = e.target.closest('[data-next]');
+    if (nx) { S.read[nx.dataset.next] = true; save(); syncState(); }
+  });
+  document.addEventListener('change', e => {
+    const cb = e.target.closest('[data-read]');
+    if (cb) { if (cb.checked) S.read[cb.dataset.read] = true; else delete S.read[cb.dataset.read]; save(); syncState(); }
+  });
+  let noteTimer;
+  document.addEventListener('input', e => {
+    const t = e.target.closest('[data-note]');
+    if (!t) return;
+    S.notes[t.dataset.note] = t.value;
+    clearTimeout(noteTimer); noteTimer = setTimeout(save, 300);
+  });
+  $('#shortBtn').addEventListener('click', () => { S.short = !S.short; save(); syncState(); });
+
+  function toast(msg) {
+    const t = $('#toast'); t.textContent = msg; t.hidden = false;
+    clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2200);
+  }
+  $('#copyBtn').addEventListener('click', () => {
+    const txt = summaryText(), fb = $('#copyFallback');
+    const fallback = () => { fb.value = txt; fb.hidden = false; fb.focus(); fb.select(); toast('Text markiert. Jetzt mit Strg+C oder ⌘C kopieren.'); };
+    try {
+      navigator.clipboard.writeText(txt).then(() => { fb.hidden = true; toast('Zusammenfassung kopiert'); }, fallback);
+    } catch (err) { fallback(); }
+  });
+  let armed = false;
+  $('#resetBtn').addEventListener('click', () => {
+    const b = $('#resetBtn');
+    if (!armed) {
+      armed = true; b.textContent = 'Wirklich alles löschen?';
+      setTimeout(() => { armed = false; b.textContent = 'Alles zurücksetzen'; }, 4000);
+      return;
+    }
+    armed = false; b.textContent = 'Alles zurücksetzen';
+    S = blank(); save(); syncState(); renderPosition(); toast('Bewertungen und Notizen gelöscht');
+  });
+
+  /* Höhe der Kopfleiste für die mobile Chipleiste */
+  const setTop = () => document.documentElement.style.setProperty('--topbar-h', $('#topbar').offsetHeight + 'px');
+  window.addEventListener('resize', setTop); setTop();
+
+  renderPincer(); renderPhase(); syncState(); route();
+})();
+</script>
