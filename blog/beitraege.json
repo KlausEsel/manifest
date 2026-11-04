@@ -1,0 +1,216 @@
+[
+  {
+    "id": "s0",
+    "order": 0,
+    "kicker": "Auftakt",
+    "title": "Ein Manifest, das wir gemeinsam weiterschreiben",
+    "teaser": "Die Soziale Marktwirtschaft braucht eine Neubegründung. Dieser Entwurf liegt nicht fertig auf dem Tisch. Er wird hier Schritt für Schritt vorgestellt und mit Ihnen weiterentwickelt.",
+    "readMin": 2,
+    "blocks": [
+      { "t": "p", "h": "Dieses Blog stellt den Entwurf eines Manifests vor: <em>Uns neu umeinander kümmern. Für eine Soziale Marktwirtschaft des 21. Jahrhunderts.</em> Es geht um eine dreifache Erschütterung aus Stagnation, Klimawandel und überfordertem Wohlfahrtsstaat und um die Frage, was eine Wirtschaftsordnung trägt, wenn die alten Voraussetzungen wegfallen." },
+      { "t": "p", "h": "Der Text erscheint nicht auf einmal. In den kommenden Wochen wird jeweils ein Kapitel freigegeben. Jeder Beitrag endet mit einer Impulsfrage. Dort können Sie kommentieren, Fragen stellen, Formulierungen vorschlagen und über die Kernthesen abstimmen." },
+      { "t": "thesis", "h": "Ein Manifest wird nicht dadurch stark, dass es fertig ist. Es wird stark, wenn <strong>viele Menschen ihre Erfahrung hineingeben</strong>: aus Pflege, Verwaltung, Wissenschaft, Unternehmen, Nachbarschaft und Familie." },
+      { "t": "h3", "n": "So machen Sie mit", "h": "Drei Wege, sich einzubringen" },
+      { "t": "cards", "items": [
+        { "n": "1", "label": "Gedanke", "title": "Eigene Erfahrung teilen", "text": "Wo begegnet Ihnen das Beschriebene im Alltag? Konkrete Beispiele machen das Manifest glaubwürdig." },
+        { "n": "2", "label": "Frage", "title": "Nachfragen und widersprechen", "text": "Was ist unklar, was überzeugt nicht? Kritik ist ausdrücklich erwünscht und wird beantwortet." },
+        { "n": "3", "label": "Vorschlag", "title": "Formulierungen verbessern", "text": "Schlagen Sie eine bessere Fassung für einen Satz oder eine Forderung vor. Gute Vorschläge fließen in die nächste Fassung ein." }
+      ] },
+      { "t": "p", "h": "Die Beiträge bauen aufeinander auf. Am Ende steht eine überarbeitete Fassung, die Ihre Rückmeldungen sichtbar aufnimmt." }
+    ],
+    "impulse": "Was erhoffen Sie sich von einer Neubegründung der Sozialen Marktwirtschaft und was befürchten Sie?",
+    "polls": []
+  },
+  {
+    "id": "s1",
+    "order": 1,
+    "kicker": "Kapitel I · Diagnose",
+    "title": "Das Modell hat seinen historischen Entwicklungspfad erschöpft",
+    "teaser": "Profitabilität, Klima, Wohlfahrt: drei Krisenlinien, die sich gegenseitig verstärken. Warum Reparatur nicht mehr reicht.",
+    "readMin": 3,
+    "blocks": [
+      { "t": "p", "h": "Die Soziale Marktwirtschaft, wie wir sie kennen, war eine Antwort auf die Bedingungen des 20. Jahrhunderts: Wiederaufbau, Vollbeschäftigung, stabiles Wachstum, überschaubare Risiken. Sie hat funktioniert — unter jenen Bedingungen. Diese Bedingungen existieren nicht mehr." },
+      { "t": "p", "h": "Wir stehen vor einer dreifachen Erschütterung, die kein Konjunkturphänomen ist, sondern eine strukturelle Zäsur. Sie verlangt keine Reparatur des Bestehenden, sondern eine Neubegründung." },
+      { "t": "pincer", "lines": {
+        "p": { "n": "Linie 1", "t": "Das Profitabilitätsproblem", "x": "Kapitalistisches Wachstum untergräbt durch Rationalisierung systematisch seine eigene Verwertungsbasis. Investitionsschwäche, Finanzialisierung und Stagnation sind keine Ausnahmen — sie sind strukturelle Normalität reifer Ökonomien." },
+        "k": { "n": "Linie 2", "t": "Das Klimaproblem", "x": "Der Klimawandel vernichtet Kapital und Produktivität durch physische Schäden. Er erzwingt Transformationsinvestitionen in einem Ausmaß, das ohne staatliche Koordination nicht mobilisierbar ist. Die ökologische Krise ist keine Umweltfrage — sie ist die soziale Frage des Jahrhunderts." },
+        "w": { "n": "Linie 3", "t": "Das Wohlfahrtsproblem", "x": "Der Wohlfahrtsstaat wurde auf Wachstum, Vollbeschäftigung und kalkulierbare Risiken gebaut. Alle drei Voraussetzungen erodieren gleichzeitig. Neue Lebenssorgebedarfe entstehen, für die keine Institution zuständig ist und keine Logik greift." }
+      } },
+      { "t": "thesis", "h": "Diese drei Linien sind nicht getrennte Krisen. Sie sind <strong>eine strukturelle Zangenbewegung</strong>: Die Stagnationstendenzen schwächen die Reaktionsfähigkeit auf den Klimawandel — der Klimawandel vertieft die Stagnationstendenzen — beide zusammen untergraben die Finanzierungsbasis des Wohlfahrtsstaats." }
+    ],
+    "impulse": "Welche der drei Krisenlinien spüren Sie in Ihrem Alltag oder Arbeitsfeld am deutlichsten? Erzählen Sie ein Beispiel.",
+    "polls": [ { "id": "these", "label": "Die drei Krisen sind eine gemeinsame Zangenbewegung, keine getrennten Probleme." } ]
+  },
+  {
+    "id": "s2",
+    "order": 2,
+    "kicker": "Kapitel II · Erschöpfung",
+    "title": "Was nicht mehr funktioniert — und warum",
+    "teaser": "Das Erhard'sche Versprechen trägt nicht mehr. Investitionsschwäche, regressive Klimapolitik und ein Sozialstaat ohne Antwort auf neue Verwundbarkeit.",
+    "readMin": 3,
+    "blocks": [
+      { "t": "p", "h": "Das Erhard'sche Versprechen lautete: Wachstum erzeugt Wohlstand, Wohlstand finanziert soziale Sicherung, soziale Sicherung legitimiert das System. Diese Formel ist historisch erschöpft." },
+      { "t": "quote", "h": "»Eine Gesellschaft, die Stabilität mit Widerstandsfähigkeit verwechselt, verwechselt Komfort mit Zukunftsfähigkeit.«" },
+      { "t": "p", "h": "Die Investitionsquote in Deutschland und Europa sinkt seit Jahrzehnten — nicht weil Kapital fehlt, sondern weil ausreichend profitable Anlagemöglichkeiten in der Realwirtschaft ausbleiben. Das Kapital weicht in Finanzanlagen, Aktienrückkäufe, Immobilienspekulation aus. Es akkumuliert sich — ohne produktive Wirkung." },
+      { "t": "p", "h": "Gleichzeitig hat die Klimapolitik eine strukturelle Regressivität produziert: Energiesteuern und CO₂-Bepreisung belasten einkommensärmere Haushalte überproportional. Klimaschutz ohne Sozialkorrektur ist kein Fortschritt — er ist eine neue Form sozialer Ungerechtigkeit." },
+      { "t": "p", "h": "Und der Wohlfahrtsstaat selbst? Er wurde entworfen, um standardisierte Risiken standardisiert zu versichern: Krankheit, Alter, Arbeitslosigkeit. Er hat keine institutionelle Antwort auf strukturelle Vulnerabilität: auf den Verlust des Arbeitsplatzes durch Extremwetter, auf Hitzekrankheiten älterer Alleinlebender, auf Klimamigration, auf die Entwertung ganzer Regionen durch den ökologischen Strukturwandel." },
+      { "t": "orn" },
+      { "t": "p", "h": "Das bismarcksche Äquivalenzprinzip — Beitrag gegen Anspruch, Erwerbsarbeit gegen Sicherung — verliert seine Funktionsfähigkeit in dem Maß, in dem Klimaschäden Risiken erzeugen, die weder versicherbar noch individuell zurechenbar sind." }
+    ],
+    "impulse": "Wo erleben Sie, dass der Sozialstaat auf neue Risiken keine Antwort hat? Welche Lücke sollte das Manifest unbedingt benennen?",
+    "polls": [ { "id": "these", "label": "Klimaschutz ohne Sozialkorrektur ist eine neue Form sozialer Ungerechtigkeit." } ]
+  },
+  {
+    "id": "s3",
+    "order": 3,
+    "kicker": "Kapitel III · Zangenbewegung",
+    "title": "Der Staat kann nicht gleichzeitig schrumpfen und transformieren",
+    "teaser": "100 Milliarden Euro im Jahr für Klimaneutralität, wachsende soziale Bedarfe, stagnierende Steuerbasis. Und die Schuldenbremse?",
+    "readMin": 2,
+    "blocks": [
+      { "t": "p", "h": "Deutschland benötigt nach konservativen Schätzungen 100 Milliarden Euro pro Jahr für Klimaneutralitätsinvestitionen — rund 2,5 Prozent des Bruttoinlandsprodukts. Gleichzeitig wächst der Bedarf an sozialen Sicherungsleistungen durch Klimafolgen, demographischen Wandel und Arbeitsmarktdisruption. Und die Steuerbasis stagniert." },
+      { "t": "thesis", "h": "Die Schuldenbremse in ihrer gegenwärtigen Form ist kein Instrument der Haushaltsdisziplin. Sie ist ein <strong>institutioneller Investitionsblockierer</strong> — der in einer Polykrise erzwingt, was er zu verhindern vorgibt: unkontrollierte Folgekosten durch aufgeschobene Transformation." },
+      { "t": "p", "h": "Wer heute nicht in Klimaschutz, Infrastruktur und Daseinsvorsorge investiert, zahlt morgen die Kosten physischer Klimaschäden, sozialer Erosion und politischer Destabilisierung. Das ist keine linke These — das ist Risikomanagement." },
+      { "t": "p", "h": "Die entscheidende verteilungspolitische Frage ist nicht, ob wir uns Transformation leisten können. Sie lautet: <em>Wer trägt die Kosten einer Transformation, die alle brauchen?</em> Die Antwort der Sozialen Marktwirtschaft des 21. Jahrhunderts muss lauten: nicht die, die sie am wenigsten verursacht haben." }
+    ],
+    "impulse": "Wer sollte die Kosten der Transformation tragen und auf welchem Weg? Halten Sie die Kritik an der Schuldenbremse für überzeugend?",
+    "polls": [ { "id": "these", "label": "Die Schuldenbremse in heutiger Form blockiert notwendige Zukunftsinvestitionen." } ]
+  },
+  {
+    "id": "s4",
+    "order": 4,
+    "kicker": "Kapitel IV · Neue Fundamente",
+    "title": "Was die Neubegründung trägt",
+    "teaser": "Nicht mehr Markt, nicht mehr Staat: Lebenssorge als strukturelle Kategorie und harte Bedingung sozialer Resilienz.",
+    "readMin": 3,
+    "blocks": [
+      { "t": "p", "h": "Eine Neubegründung der Sozialen Marktwirtschaft braucht ein anderes normatives Fundament als das des Nachkriegskapitalismus. Dieses Fundament heißt: <strong>Lebenssorge</strong>." },
+      { "t": "p", "h": "Nicht im sentimentalen Sinn — sondern als strukturelle Kategorie. Was Menschen in Krisen stabilisiert, sind keine Transferleistungen allein: Es sind verlässliche Lebenssorge-Verhältnisse. Vertrauen. Nähe. Zusammenarbeit. Das sind keine weichen Faktoren — das sind die harten Bedingungen sozialer Resilienz." },
+      { "t": "quote", "h": "»Was wir brauchen, ist nicht mehr Markt und nicht mehr Staat. Wir brauchen mehr Fähigkeit, füreinander da zu sein — und Institutionen, die das ermöglichen statt verhindern.«" },
+      { "t": "p", "h": "Eine Gesellschaft, die Lebenssorge-Tätigkeit strukturell entwertet — durch fehlende Zeit, fehlende Infrastruktur, fehlende Anerkennung —, produziert nicht nur individuelle Not. Sie produziert kollektive Fragilität. Sie ist nicht resilienzfähig gegenüber Krisen, die sie nicht vorhersehen konnte. Und sie wird die Transformationsaufgaben des 21. Jahrhunderts nicht bestehen." },
+      { "t": "p", "h": "Die Neubegründung der Sozialen Marktwirtschaft fragt deshalb nicht nur: <em>Wie finanzieren wir soziale Sicherung?</em> Sie fragt: <em>Welche Art von Gesellschaft wollen wir sein?</em> Und sie antwortet: Eine, in der Lebenssorge füreinander nicht Privatsache, sondern strukturell ermöglichte Gemeinschaftspraxis ist." },
+      { "t": "orn" },
+      { "t": "p", "h": "Das ist keine Absage an den Markt. Märkte sind unverzichtbare Koordinationsmechanismen. Aber sie brauchen — wie Ludwig Erhard und Walter Eucken wussten — einen ordnungspolitischen Rahmen. Dieser Rahmen muss heute neu gesetzt werden: nicht für die Bedingungen des Wirtschaftswunders, sondern für eine Ökonomie im Zeichen von Klimatransformation, demographischem Wandel und struktureller Stagnation." }
+    ],
+    "impulse": "Wo erleben Sie Lebenssorge, die trägt, und wo fehlt sie? Was müsste eine Institution leisten, damit sie Lebenssorge ermöglicht statt verhindert?",
+    "polls": [ { "id": "these", "label": "Lebenssorge sollte das normative Fundament einer erneuerten Sozialen Marktwirtschaft sein." } ]
+  },
+  {
+    "id": "s5",
+    "order": 5,
+    "kicker": "Kapitel V · Forderungen",
+    "title": "Sechs Handlungsfelder für eine Neubegründung",
+    "teaser": "Investitionen, Eigentum, Grundeinkommen, Daseinsvorsorge, Klimagerechtigkeit, Wohlstand: Stimmen Sie über jede Forderung einzeln ab.",
+    "readMin": 4,
+    "blocks": [
+      { "t": "p", "h": "Aus der Analyse ergeben sich sechs konkrete Handlungsfelder. Sie sind nicht voneinander trennbar. Sie bilden ein Ensemble. Unter jeder Forderung können Sie Ihre Haltung angeben." },
+      { "t": "cards", "items": [
+        { "n": "1", "label": "Investitionsregime", "title": "Öffentliche Investitionslogik jenseits der Schuldenbremse", "text": "Private Investitionen können die Transformation nicht allein tragen. Eine dauerhaft wirksame öffentliche Investitionsarchitektur — europäische Investitionsunion, nationale Entwicklungsbanken, zweckgebundene Sondervermögen — ist keine Ausnahme. Sie ist Normalzustand.", "poll": "f1" },
+        { "n": "2", "label": "Eigentumsordnung", "title": "Verbreiterung der Kapitalbasis durch gemeinwirtschaftliche Formen", "text": "Genossenschaften, Gemeindewerke, Stiftungsmodelle in Energie, Wohnen, Pflege und digitaler Infrastruktur. Nicht Verstaatlichung — aber eine bewusste Ordnungspolitik, die Marktversagen in Transformationssektoren durch gemeinwirtschaftliche Alternativen korrigiert.", "poll": "f2" },
+        { "n": "3", "label": "Soziale Sicherung", "title": "Solidarisches Grundeinkommen — Existenzsicherung jenseits der Lohnarbeit", "text": "Ein lebensphasensensibles Solidarisches Grundeinkommen entkoppelt Existenzsicherung von Erwerbsarbeit. Es ist die strukturelle Voraussetzung für Lebenssorge-Kapazität: Wer seine Existenz nicht permanent am Arbeitsmarkt verteidigen muss, hat Raum für Lebenssorge füreinander.", "poll": "f3" },
+        { "n": "4", "label": "Daseinsvorsorge", "title": "Infrastruktur der Lebenssorge — Zeit, Raum, Gemeinschaft", "text": "Pflege, Bildung, Gesundheit und Gemeinschaft sind keine Restposten nach Marktversorgung. Sie sind Kern öffentlicher Daseinsvorsorge. Dazu gehört Arbeitszeitverkürzung als strukturelle Voraussetzung für Zeit für Lebenssorge.", "poll": "f4" },
+        { "n": "5", "label": "Klimagerechtigkeit", "title": "Klimapolitik als Sozialpolitik — von Anfang an", "text": "CO₂-Bepreisung ohne Sozialkorrektur ist regressiv. Klimapolitik und Sozialpolitik müssen institutionell verzahnt werden — nicht nachgelagert, sondern als gemeinsames Reformprojekt. Wer am wenigsten emittiert, darf nicht am meisten zahlen.", "poll": "f5" },
+        { "n": "6", "label": "Wohlstandsbegriff", "title": "Jenseits des BIP — Wohlstand als sozialer Qualitätsbegriff", "text": "Wohlstandsindikatoren, die Lebenssorge-Verhältnisse, ökologische Stabilität und gesellschaftliche Teilhabe messen, müssen Eingang in Haushaltspolitik und Investitionsplanung finden. Wachstum ist Mittel, nicht Zweck.", "poll": "f6" }
+      ] }
+    ],
+    "impulse": "Welche Forderung fehlt? Welche würden Sie anders formulieren? Schreiben Sie Ihren Vorschlag als Kommentar mit der Art „Vorschlag“.",
+    "polls": [
+      { "id": "f1", "label": "Öffentliche Investitionslogik jenseits der Schuldenbremse" },
+      { "id": "f2", "label": "Gemeinwirtschaftliche Eigentumsformen" },
+      { "id": "f3", "label": "Solidarisches Grundeinkommen" },
+      { "id": "f4", "label": "Infrastruktur der Lebenssorge" },
+      { "id": "f5", "label": "Klimapolitik als Sozialpolitik" },
+      { "id": "f6", "label": "Wohlstand jenseits des BIP" }
+    ]
+  },
+  {
+    "id": "s6",
+    "order": 6,
+    "kicker": "Kapitel VI · KI & Humanitas",
+    "title": "Künstliche Intelligenz — Testfall der Neubegründung",
+    "teaser": "Rerum novarum antwortete auf die Dampfmaschine, Magnifica humanitas antwortet auf die KI. Zwei neue Forderungen zur digitalen Allmende.",
+    "readMin": 5,
+    "blocks": [
+      { "t": "p", "h": "Am 25. Mai 2026 veröffentlichte Papst Leo XIV. seine erste Enzyklika <em>Magnifica humanitas</em> — bezeichnenderweise zum 135. Jahrestag von <em>Rerum novarum</em>, dem Gründungsdokument der katholischen Soziallehre als Antwort auf die Industrielle Revolution. Die Parallele ist keine historische Koinzidenz. Sie ist ein Urteil: Die Künstliche Intelligenz ist für das 21. Jahrhundert, was die Dampfmaschine für das 19. war — ein technologischer Umbruch, der die soziale Frage neu stellt." },
+      { "t": "thesis", "h": "Leo XIV. formuliert es direkt: <strong>„In der Zeit der Künstlichen Intelligenz, in der die Menschenwürde aufgrund neuer Formen von Entmenschlichung in den Hintergrund zu treten droht, haben wir die dringende Pflicht, zutiefst menschlich zu bleiben.“</strong>" },
+      { "t": "p", "h": "Das ist kein frommer Appell. Es ist eine strukturelle Diagnose, die mit den Befunden der Politökonomie konvergiert: KI verändert nicht nur Produktionsprozesse — sie verändert das Verhältnis von Kapital und Arbeit, von Macht und Ohnmacht, von Würde und Verwertbarkeit." },
+      { "t": "h3", "n": "1 ·", "h": "Das Eigentumsproblem der KI" },
+      { "t": "p", "h": "KI ist gesellschaftlich erzeugtes Wissen — aus Milliarden menschlicher Interaktionen, Texte, Entscheidungen destilliert. Es wird privatwirtschaftlich angeeignet und als Kapital verwandt. <em>Magnifica humanitas</em> benennt dies als das Kernproblem: KI dürfe nicht durch einige wenige Technologiemilliardäre kontrolliert werden. Das Dokument warnt vor den <strong>„neuen seltenen Erden der Macht“</strong> — Gesundheitsdaten, demographische Daten, Verhaltensdaten, die für Investitionsstrategien genutzt werden." },
+      { "t": "p", "h": "Politökonomisch übersetzt: KI ist die bisher reinste Ausdrucksform des marxschen <em>Allgemeinen Intellekts</em> — das akkumulierte Wissen der Gesellschaft, in Privateigentum eingeschlossen. Die ordnungspolitische Antwort kann nur lauten: <strong>Digitale Allmende</strong> statt privater Monopolisierung." },
+      { "t": "h3", "n": "2 ·", "h": "Die Würde der Arbeit" },
+      { "t": "p", "h": "Die Enzyklika hält fest: <em>„Arbeit ist nicht einfach ein Instrument; sie drückt die Würde unseres Lebens aus und stärkt sie — eine Notwendigkeit des Menschseins, ein normaler Weg zur Reife.“</em> Das ist keine romantische Verklärung von Arbeit. Es ist die Warnung vor einer Ökonomie, die Arbeit als reinen Kostenfaktor behandelt, der durch Automatisierung zu minimieren ist." },
+      { "t": "p", "h": "Wenn KI Arbeit substituiert, ohne dass die gesellschaftlichen Gewinne rückverteilt werden, entsteht keine Befreiung von Arbeit — es entsteht Ausschluss von Würde. Das Solidarische Grundeinkommen ist in diesem Licht nicht nur ein sozialpolitisches Instrument, sondern eine anthropologische Notwendigkeit: Es sichert Würde unabhängig von Verwertbarkeit." },
+      { "t": "h3", "n": "3 ·", "h": "Öffentliche Kontrolle als Gebot" },
+      { "t": "p", "h": "Leo XIV. fordert eine gerechte soziale Ordnung im digitalen Zeitalter: <em>„Eine, die allen einen gleichberechtigten Zugang zu Chancen garantiert, die Jüngsten und Fragilsten schützt, Hass und Desinformation bekämpft und die Nutzung von Daten und Technologien einer öffentlichen Kontrolle unterwirft — damit nicht der bloße Profit zum Maßstab wird, sondern die Würde eines jeden Menschen und das Wohl der Völker.“</em>" },
+      { "t": "p", "h": "Und er ruft die Regulierungsbehörden weltweit dazu auf, sich vom BIP abzuwenden und einen neuen Maßstab für allgemeines Wohlergehen einzuführen — eine Forderung, die sich unmittelbar mit dem sechsten Handlungsfeld dieses Manifests deckt." },
+      { "t": "cards", "items": [
+        { "n": "7", "label": "KI-Governance", "title": "Digitale Allmende — KI als Gemeingut", "text": "KI-Systeme, die auf gesellschaftlich erzeugten Daten basieren, dürfen nicht Privateigentum weniger Konzerne sein. Öffentliche KI-Infrastruktur, Datentreuhänder, genossenschaftliche Plattformmodelle. Die Gewinne der Automatisierung gehören der Gesellschaft — als KI-Dividende, als Arbeitszeitverkürzung, als Investition in Lebenssorge-Infrastruktur.", "poll": "f7" },
+        { "n": "8", "label": "Menschenwürde", "title": "KI entwaffnen — Würde vor Verwertbarkeit", "text": "KI darf nicht zur Überwachung, Kontrolle und Disziplinierung von Arbeit eingesetzt werden. Sie muss Lebenssorge-Tätigkeit entlasten, nicht ersetzen. Militärische KI-Autonomie ist abzulehnen. Der Maßstab jeder KI-Anwendung ist die Frage: Stärkt sie menschliche Würde und Handlungsfähigkeit — oder untergräbt sie diese?", "poll": "f8" }
+      ] },
+      { "t": "quote", "h": "»Rerum novarum antwortete auf die Dampfmaschine. Magnifica humanitas antwortet auf die KI. Das Manifest antwortet auf beides — mit einer Ordnung, die Würde vor Gewinn stellt.«" }
+    ],
+    "impulse": "Wie müsste KI gestaltet und kontrolliert werden, damit sie Lebenssorge-Tätigkeit entlastet statt ersetzt? Kennen Sie gelungene oder abschreckende Beispiele?",
+    "polls": [
+      { "id": "f7", "label": "Digitale Allmende: KI als Gemeingut" },
+      { "id": "f8", "label": "KI entwaffnen: Würde vor Verwertbarkeit" }
+    ]
+  },
+  {
+    "id": "s7",
+    "order": 7,
+    "kicker": "Kapitel VII · Der lange Lauf",
+    "title": "Der lange Lauf — Rahmenplan einer anderen Veränderungslogik",
+    "teaser": "Keine Blaupause, sondern eine Lernbewegung: Wie Veränderung wirklich geschieht und warum sie Jahrzehnte braucht.",
+    "readMin": 5,
+    "blocks": [
+      { "t": "p", "h": "Dieses Manifest formuliert Forderungen. Aber es wäre unehrlich, wenn es verschwiege, wie Veränderung wirklich geschieht — und wie lange sie dauert. Wer den gesellschaftlichen Umbau, der hier skizziert wird, als politisches Projekt der nächsten Legislaturperiode versteht, hat das Wesentliche nicht verstanden." },
+      { "t": "p", "h": "Klaus Bremen nennt die Dimension, um die es geht, den <strong>„langen Lauf“</strong>: die historische Übergangsphase in das Zeitalter der Klima- und Naturveränderungen. Gemeint ist kein kurzfristiger Krisenmodus, sondern ein jahrzehntelanger gesellschaftlicher Transformationsprozess, in dem Menschen lernen müssen, unter dauerhaft veränderten ökologischen, sozialen und ökonomischen Bedingungen zu leben. Der lange Lauf ist zugleich eine Belastungsprobe für Demokratie, Sozialstaat und gesellschaftlichen Zusammenhalt." },
+      { "t": "thesis", "h": "Der lange Lauf entsteht daraus, dass Klima- und Naturveränderungen nicht mehr als vorübergehende Ausnahme verstanden werden können. <strong>Gesellschaften müssen lernen, dauerhaft unter Bedingungen von Unsicherheit, Krisenhäufung und tiefgreifendem Wandel handlungsfähig zu bleiben.</strong>" },
+      { "t": "h3", "n": "1 ·", "h": "Keine Blaupause — eine Lernbewegung" },
+      { "t": "p", "h": "Bremen weist den großen politischen Durchgriff ausdrücklich zurück. Im Kapitel „Wie handeln?“ kritisiert er die Vorstellung, Gesellschaft lasse sich „wie eine Kiste neu zimmern“. Veränderung ist nicht Revolution und nicht Masterplan. Sie ist:" },
+      { "t": "cells", "items": [
+        { "label": "Zeitlich", "title": "Langfristig und schrittweise", "text": "Wirksame Transformation vollzieht sich in Jahrzehnten, nicht in Wahlperioden. Sie braucht Kontinuität über politische Konjunkturen hinaus." },
+        { "label": "Epistemisch", "title": "Experimentell und lernorientiert", "text": "Kein Modell kann die Komplexität des Wandels antizipieren. Gesellschaftliche Transformation ist ein Prozess kollektiver Erfahrungsbildung." },
+        { "label": "Politisch", "title": "Demokratisch und prozesshaft", "text": "Autoritäre Steuerung scheitert langfristig, weil nachhaltige Veränderungen gelernt und sozial getragen werden müssen — nicht verordnet." }
+      ] },
+      { "t": "h3", "n": "2 ·", "h": "François Jullien und die Logik des günstigen Moments" },
+      { "t": "p", "h": "Mit Bezug auf den Philosophen François Jullien und antikes chinesisches Denken entwickelt Bremen eine alternative Veränderungstheorie: Wirksame Transformation entsteht nicht primär durch heroische Eingriffe von oben, sondern dadurch, <em>günstige Entwicklungstendenzen früh wahrzunehmen und kontinuierlich zu verstärken.</em> Veränderung „erstreckt sich in der Dauer“." },
+      { "t": "quote", "h": "»Nicht der große Eingriff — sondern die beharrliche Stärkung dessen, was bereits in die richtige Richtung tendiert. Das ist die politische Kunst des langen Laufs.«" },
+      { "t": "p", "h": "Übersetzt in die Sprache der Ordnungspolitik: Es geht nicht darum, das System zu überwältigen, sondern darum, die strukturellen Weichen so zu stellen, dass soziale Praxis sich schrittweise in Richtung Solidarität, Lebenssorge und ökologischer Verantwortung verschiebt. Institutionen als Ermöglichungsräume — nicht als Verwaltungsapparate." },
+      { "t": "h3", "n": "3 ·", "h": "Fünf Dimensionen der Veränderung" },
+      { "t": "cards", "items": [
+        { "n": "I", "label": "Durch soziale Praxis", "title": "Neue Erfahrungsräume statt Gesetze", "text": "Der Sozialstaat soll Räume schaffen, in denen Menschen neue Gewohnheiten gegenseitiger Lebenssorge praktisch einüben können — nicht primär durch Vorschriften, sondern durch gestaltete soziale Gelegenheiten." },
+        { "n": "II", "label": "Durch reale Beziehungen", "title": "Face-to-Face als gesellschaftlicher Lernort", "text": "Selbsthilfegruppen, Netzwerke, soziale Dienstleistungen sind Orte gesellschaftlicher Lernprozesse. Gewohnheiten verändern sich nicht durch moralische Appelle, sondern durch soziale Einbettung." },
+        { "n": "III", "label": "Durch Zeit", "title": "Recht auf soziale Zeit", "text": "Zeit ist selbst eine Voraussetzung von Transformation. Begegnung, Resonanz und Vertrauensbildung brauchen Zeit — die der Markt nicht produziert. Das Recht auf soziale Zeit ist daher ein sozialpolitisches Grundrecht." },
+        { "n": "IV", "label": "Institutionell", "title": "Weiterentwicklung statt Abschaffung", "text": "Der bestehende Sozialstaat wird nicht abgeschafft, sondern auf eine neue Entwicklungsstufe gehoben. Reform als Kreationsprozess — nicht als Abbau, nicht als Neustart, sondern als kontinuierliche Weiterentwicklung." }
+      ] },
+      { "t": "h3", "n": "4 ·", "h": "Der lange Lauf als Zeithorizont des Manifests" },
+      { "t": "p", "h": "Die sechs Handlungsfelder dieses Manifests sind keine kurzfristigen Programmpunkte. Sie sind Weichenstellungen für einen langen Lauf — Jahrzehnte gesellschaftlichen Umbaus, der auf mehreren Zeitebenen gleichzeitig stattfindet. Wählen Sie eine Phase:" },
+      { "t": "timeline", "phases": [
+        { "range": "2026–2030", "name": "Kurzfristig", "title": "Strukturelle Weichenstellungen", "items": ["Investitionsarchitektur", "Grundeinkommensmodelle", "KI-Regulierung", "Klimasozialgesetz"] },
+        { "range": "2030–2040", "name": "Mittelfristig", "title": "Institutioneller Umbau", "items": ["Neue Eigentumsformen", "Lebenssorge-Infrastruktur", "Wohlstandsindikatoren in der Haushaltspolitik"] },
+        { "range": "2040+", "name": "Langfristig", "title": "Kultureller Wandel", "items": ["Neue Gewohnheiten", "Veränderte Normalität der Lebenssorge", "Demokratische Resilienz unter Dauerstress"] }
+      ] },
+      { "t": "p", "h": "Das ist keine Entschuldigung für Zögerlichkeit. Weichenstellungen müssen jetzt erfolgen — weil der lange Lauf bereits begonnen hat. Die Frage ist nicht, ob er stattfindet. Die Frage ist, ob wir ihn gestalten oder erleiden." }
+    ],
+    "impulse": "Welche günstigen Entwicklungen sehen Sie schon heute in Ihrem Umfeld, die man im Sinne des langen Laufs stärken sollte?",
+    "polls": [ { "id": "these", "label": "Gesellschaftlicher Wandel gelingt eher durch beharrliche Lernschritte als durch den großen Masterplan." } ]
+  },
+  {
+    "id": "s8",
+    "order": 8,
+    "kicker": "Kapitel VIII · Vision",
+    "title": "Was wir anstreben",
+    "teaser": "Keine Rückkehr, sondern ein Aufbruch: von der wachstumsfinanzierten Umverteilung zur lebenssorgebasierten Infrastrukturlogik.",
+    "readMin": 3,
+    "blocks": [
+      { "t": "p", "h": "Wir streben keine Rückkehr an. Nicht zum Wirtschaftswunder, nicht zur Vollbeschäftigungsgesellschaft der 1960er, nicht zur sozialen Sicherheit der alten Bundesrepublik. Diese Welt ist vorbei. Wir streben einen Aufbruch an." },
+      { "t": "p", "h": "Eine Gesellschaft, in der die Lebenssorge füreinander nicht gegen Erwerbsarbeit ausgespielt wird. In der Transformation als gemeinsame Aufgabe und nicht als individuelle Zumutung verstanden wird. In der ökologische Grenzen als Bedingung und nicht als Fessel begriffen werden." },
+      { "t": "p", "h": "Eine Wirtschaftsordnung, die Märkte als Instrumente einsetzt — nicht als Götzen verehrt. Die öffentliche Güter schützt, weil sie weiß, dass der Markt sie nicht produzieren kann. Die soziale Ungleichheit begrenzt, weil sie weiß, dass Demokratie ohne materielle Grundlage brüchig ist." },
+      { "t": "final", "h": "Die Neubegründung der Sozialen Marktwirtschaft erfordert den Übergang von einer <strong>wachstumsfinanzierten Umverteilungslogik</strong> zu einer <strong>lebenssorgebasierten Infrastrukturlogik</strong> — getragen von öffentlichen Investitionen, verbreiterten Eigentumsformen und einer Wohlstandsdefinition, die ökologische Grenzen und soziale Bedarfe als konstitutiv begreift — nicht als Korrekturposten." },
+      { "t": "basis", "h": "Dieses Manifest gründet auf der politökonomischen Langzeitanalyse wirtschaftlicher Entwicklung im 21. Jahrhundert: dem empirischen Befund zur Profitratendynamik (Roberts, Kliman, Rotta/Kumar), der Klimafolgenforschung (Nature Climate Change, EZB, OECD) sowie der wohlfahrtsstaatlichen Transformationsforschung (Journal of Social Policy, Cambridge Core). Die normative Grundlage bildet das Konzept der Lebenssorge als struktureller Kategorie, entwickelt in Anlehnung an Klaus Bremen, <em>Uns neu umeinander kümmern</em> (oekom Verlag, 2025).", "items": ["Marxsche Politökonomie", "Klimafolgenforschung", "Wohlfahrtsstaatstheorie", "Ökosoziale Transformation", "Lebenssorge-Ökonomie", "Ordnungspolitik"] }
+    ],
+    "impulse": "Wie würden Sie die zentrale These in einem eigenen Satz sagen? Der überzeugendste Vorschlag kann in die nächste Fassung einfließen.",
+    "polls": [ { "id": "these", "label": "Ich unterstütze die zentrale These des Manifests." } ]
+  }
+]

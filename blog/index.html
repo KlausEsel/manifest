@@ -1,0 +1,592 @@
+<title>Manifest-Blog Lebenssorge</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,500;0,9..144,700;1,9..144,400;1,9..144,600&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,600;1,7..72,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+  /* Layout: Blog in einer Lesespalte (~68 Zeichen). Kopfband mit Serienleiste (ein Segment pro Beitrag), darunter Feed oder Beitrag mit Mitmach-Bereich. Redaktion nur für Bearbeitende. */
+  :root {
+    --paper: #f3f5f4;
+    --surface: #ffffff;
+    --ink: #15201f;
+    --muted: #586664;
+    --line: #d4dcda;
+    --accent: #9b1c1c;
+    --accent-soft: #f5e2df;
+    --petrol: #1f5b58;
+    --petrol-soft: #e0ecea;
+    --pos: #2c6e4c;
+    --mid: #8a7a3a;
+    --neg: #9b1c1c;
+    --f-display: 'Fraunces', Georgia, 'Times New Roman', serif;
+    --f-read: 'Literata', Georgia, 'Times New Roman', serif;
+    --f-ui: 'IBM Plex Sans', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --f-mono: 'IBM Plex Mono', ui-monospace, Menlo, monospace;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper: #0f1514; --surface: #172020; --ink: #e5edeb; --muted: #99a8a5; --line: #2b3735;
+      --accent: #e8766c; --accent-soft: #3a201e; --petrol: #82c6bf; --petrol-soft: #1b3230;
+      --pos: #6cc39a; --mid: #d2bf73; --neg: #e8766c; color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper: #0f1514; --surface: #172020; --ink: #e5edeb; --muted: #99a8a5; --line: #2b3735;
+    --accent: #e8766c; --accent-soft: #3a201e; --petrol: #82c6bf; --petrol-soft: #1b3230;
+    --pos: #6cc39a; --mid: #d2bf73; --neg: #e8766c; color-scheme: dark;
+  }
+  *, *::before, *::after { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-read); font-size: 17px; line-height: 1.7; overflow-x: hidden; }
+  body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--surface); }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  :focus-visible { outline: 2px solid var(--petrol); outline-offset: 2px; }
+  a { color: var(--petrol); }
+  .wrap { max-width: 760px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+
+  /* KOPF */
+  .head { background: var(--surface); border-bottom: 1px solid var(--line); position: sticky; top: env(safe-area-inset-top, 0px); z-index: 20; }
+  .head .wrap { padding-block: 12px; display: flex; align-items: center; gap: 14px; flex-wrap: wrap; }
+  .brand { flex: 1 1 240px; min-width: 0; text-decoration: none; color: var(--ink); display: flex; flex-direction: column; }
+  .brand b { font-family: var(--f-display); font-weight: 600; font-size: 1.1rem; line-height: 1.2; }
+  .brand small { font-family: var(--f-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+  .series { display: flex; align-items: center; gap: 10px; font-family: var(--f-ui); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+  .steps { display: flex; gap: 3px; }
+  .steps i { width: 14px; height: 6px; border-radius: 2px; background: var(--line); }
+  .steps i.on { background: var(--accent); }
+  .btn { font-family: var(--f-ui); font-size: 13px; font-weight: 500; border: 1px solid var(--line); background: var(--surface); color: var(--ink); padding: 7px 12px; border-radius: 6px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 6px; line-height: 1.2; }
+  .btn:hover { border-color: var(--petrol); }
+  .btn.primary { background: var(--accent); border-color: var(--accent); color: var(--surface); }
+  .btn.petrol { background: var(--petrol); border-color: var(--petrol); color: var(--surface); }
+  .btn.danger { color: var(--neg); }
+  .btn[disabled] { opacity: .5; cursor: not-allowed; }
+  .btn[aria-pressed="true"] { background: var(--petrol); border-color: var(--petrol); color: var(--surface); }
+
+  main { padding-block: 36px 80px; }
+  .eyebrow { font-family: var(--f-mono); font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: var(--accent); margin: 0 0 10px; }
+  h1, h2, h3, h4 { font-family: var(--f-display); text-wrap: balance; margin: 0; }
+  h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); line-height: 1.1; font-weight: 700; letter-spacing: -.01em; }
+  h1 em { color: var(--accent); font-weight: 600; }
+  h2 { font-size: clamp(1.5rem, 3.4vw, 2.1rem); line-height: 1.15; font-weight: 700; }
+  h3 { font-size: 1.2rem; font-style: italic; font-weight: 600; color: var(--accent); margin: 36px 0 10px; display: flex; gap: 10px; align-items: baseline; }
+  h3 span { font-family: var(--f-mono); font-style: normal; font-size: 11px; color: var(--muted); letter-spacing: .1em; }
+  h4 { font-size: 1.05rem; line-height: 1.3; font-weight: 600; }
+  p { margin: 0 0 1.1em; }
+  .ui { font-family: var(--f-ui); font-size: 14px; color: var(--muted); }
+
+  /* FEED */
+  .intro { margin-bottom: 36px; }
+  .intro .lede { font-style: italic; color: var(--muted); border-left: 2px solid var(--accent); padding-left: 16px; margin-top: 18px; }
+  .feed { display: flex; flex-direction: column; gap: 14px; }
+  .card { display: block; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 20px 22px; text-decoration: none; color: var(--ink); }
+  .card:hover { border-color: var(--petrol); }
+  .card.latest { border-top: 3px solid var(--accent); padding: 26px; }
+  .card.latest h2 { margin-bottom: 10px; }
+  .card h4 { font-size: 1.2rem; margin-bottom: 6px; }
+  .card p { color: var(--muted); font-size: .95rem; margin: 0; }
+  .meta { display: flex; gap: 14px; flex-wrap: wrap; font-family: var(--f-ui); font-size: 12px; color: var(--muted); margin-top: 12px; }
+  .meta b { color: var(--accent); font-weight: 600; }
+  .new { display: inline-block; font-family: var(--f-mono); font-size: 10px; letter-spacing: .15em; background: var(--accent); color: var(--surface); padding: 2px 6px; border-radius: 3px; margin-left: 8px; vertical-align: middle; }
+  .next { border: 1px dashed var(--line); border-radius: 8px; padding: 18px 22px; font-family: var(--f-ui); color: var(--muted); font-size: 14px; }
+  .next b { display: block; font-family: var(--f-display); font-size: 1.05rem; color: var(--ink); margin-top: 4px; }
+  .empty { font-family: var(--f-ui); font-size: 14px; color: var(--muted); background: var(--surface); border: 1px dashed var(--line); border-radius: 8px; padding: 22px; }
+  .empty b { display: block; color: var(--ink); font-size: 15px; margin-bottom: 4px; }
+
+  /* BEITRAG */
+  .post-head { margin-bottom: 28px; }
+  .post-head h2 { margin-bottom: 14px; }
+  .back { font-family: var(--f-ui); font-size: 13px; text-decoration: none; display: inline-block; margin-bottom: 22px; }
+  .preview-bar { font-family: var(--f-ui); font-size: 13px; background: var(--accent-soft); color: var(--accent); padding: 10px 14px; border-radius: 6px; margin-bottom: 22px; display: flex; gap: 12px; flex-wrap: wrap; align-items: center; justify-content: space-between; }
+  .thesis { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--accent); padding: 22px 26px; margin: 28px 0; }
+  .thesis p { font-family: var(--f-display); font-style: italic; font-size: 1.12rem; line-height: 1.6; margin: 0; }
+  .thesis strong { font-style: normal; color: var(--accent); }
+  .quote { border-left: 3px solid var(--petrol); padding: 2px 0 2px 22px; margin: 28px 0; max-width: 58ch; }
+  .quote p { font-family: var(--f-display); font-style: italic; font-size: 1.22rem; line-height: 1.45; color: var(--muted); margin: 0; }
+  .orn { text-align: center; color: var(--muted); font-family: var(--f-mono); margin: 22px 0; }
+  .cards { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; margin: 24px 0; }
+  .dcard { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; display: flex; flex-direction: column; gap: 8px; min-width: 0; }
+  .d-head { display: flex; align-items: baseline; gap: 10px; }
+  .d-num { font-family: var(--f-display); font-weight: 700; font-size: 1.5rem; line-height: 1; color: var(--accent); min-width: 1.3em; }
+  .d-field { font-family: var(--f-mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); }
+  .dcard > p { font-size: .9rem; line-height: 1.6; color: var(--muted); margin: 0; flex: 1; }
+  .cells { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 24px 0; }
+  .cell { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; font-size: .9rem; line-height: 1.55; }
+  .cell .eyebrow { font-size: 10px; margin-bottom: 6px; }
+  .cell b { display: block; font-family: var(--f-display); margin-bottom: 4px; }
+  .final { background: var(--petrol-soft); border-top: 3px solid var(--accent); padding: 28px 26px; margin: 32px 0; border-radius: 0 0 8px 8px; }
+  .final p { font-family: var(--f-display); font-style: italic; font-size: clamp(1.08rem, 2.4vw, 1.35rem); line-height: 1.55; margin: 0; }
+  .final strong { font-style: normal; color: var(--accent); }
+  .basis { border-top: 1px solid var(--line); padding-top: 20px; margin-top: 32px; font-size: .9rem; color: var(--muted); display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 24px; }
+  .basis ul { list-style: none; margin: 0; padding: 0; font-family: var(--f-mono); font-size: 12px; line-height: 2; }
+
+  .pincer { display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); gap: 16px; margin: 26px 0; align-items: start; }
+  .pincer-fig { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 8px; }
+  .pincer-fig svg { display: block; width: 100%; height: auto; }
+  .edge { fill: none; stroke: var(--line); stroke-width: 2.5; }
+  .edge-label { font-family: var(--f-ui); font-size: 16px; fill: var(--muted); }
+  .arrow { fill: var(--line); } .arrow-on { fill: var(--accent); }
+  .edge.on { stroke: var(--accent); } .edge-label.on { fill: var(--accent); font-weight: 600; }
+  .dim { opacity: .3; }
+  .node { cursor: pointer; }
+  .node circle { fill: var(--paper); stroke: var(--petrol); stroke-width: 2; }
+  .node text { font-family: var(--f-ui); fill: var(--ink); text-anchor: middle; pointer-events: none; }
+  .node .nl { font-family: var(--f-mono); font-size: 11px; fill: var(--muted); }
+  .node .nt { font-size: 17px; font-weight: 600; }
+  .node:hover circle { fill: var(--petrol-soft); }
+  .node.on circle { fill: var(--petrol); } .node.on text { fill: var(--surface); }
+  .node:focus { outline: none; } .node:focus-visible circle { stroke-width: 4; }
+  .pincer-detail { background: var(--surface); border: 1px solid var(--line); border-top: 3px solid var(--petrol); border-radius: 8px; padding: 16px 18px; font-size: .93rem; line-height: 1.6; min-width: 0; }
+  .pincer-detail h4 { margin-bottom: 6px; } .pincer-detail p { margin: 0; }
+  .pick { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 12px; }
+
+  .tl-track { display: grid; grid-template-columns: 4fr 10fr 6fr; gap: 4px; margin-top: 20px; }
+  .tl-track button { text-align: left; border: 1px solid var(--line); background: var(--surface); cursor: pointer; padding: 12px 14px; border-radius: 6px; font-family: var(--f-ui); min-width: 0; }
+  .tl-track button b { display: block; font-family: var(--f-mono); font-size: 12px; color: var(--accent); font-weight: 500; }
+  .tl-track button span { font-size: 14px; font-weight: 600; }
+  .tl-track button[aria-selected="true"] { background: var(--petrol); border-color: var(--petrol); color: var(--surface); }
+  .tl-track button[aria-selected="true"] b { color: var(--surface); }
+  .tl-panel { background: var(--surface); border: 1px solid var(--line); border-left: 4px solid var(--petrol); padding: 16px 20px; margin: 8px 0 24px; border-radius: 0 8px 8px 0; }
+  .tl-panel ul { margin: 8px 0 0; padding-left: 20px; font-size: .95rem; }
+
+  /* ABSTIMMUNG */
+  .vote { display: flex; flex-direction: column; gap: 8px; margin-top: 6px; }
+  .vote-q { font-family: var(--f-ui); font-size: 14px; font-weight: 500; }
+  .vote-btns { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 4px; }
+  .vote-btns button { font-family: var(--f-ui); font-size: 12px; padding: 7px 4px; border-radius: 5px; border: 1px solid var(--line); background: var(--paper); color: var(--muted); cursor: pointer; line-height: 1.2; }
+  .vote-btns button:hover:not([disabled]) { border-color: var(--petrol); color: var(--ink); }
+  .vote-btns button[aria-pressed="true"][data-v="1"] { background: var(--pos); border-color: var(--pos); color: var(--surface); }
+  .vote-btns button[aria-pressed="true"][data-v="0"] { background: var(--mid); border-color: var(--mid); color: var(--surface); }
+  .vote-btns button[aria-pressed="true"][data-v="-1"] { background: var(--neg); border-color: var(--neg); color: var(--surface); }
+  .vote-btns button[disabled] { cursor: not-allowed; }
+  .tally { display: flex; height: 8px; border-radius: 4px; overflow: hidden; background: var(--line); }
+  .tally i { display: block; height: 100%; }
+  .tally-txt { font-family: var(--f-ui); font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+  /* MITMACHEN */
+  .join { margin-top: 48px; border-top: 2px solid var(--ink); padding-top: 28px; }
+  .impulse { background: var(--accent-soft); border-radius: 8px; padding: 22px 24px; margin: 16px 0 24px; }
+  .impulse .eyebrow { margin-bottom: 6px; }
+  .impulse p { font-family: var(--f-display); font-size: 1.2rem; line-height: 1.45; margin: 0; color: var(--ink); }
+  .poll-box { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 18px; margin-bottom: 24px; }
+  .composer { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 16px; display: flex; flex-direction: column; gap: 10px; margin-bottom: 24px; }
+  .kinds { display: flex; gap: 6px; flex-wrap: wrap; }
+  textarea { width: 100%; min-height: 96px; resize: vertical; border: 1px solid var(--line); background: var(--paper); border-radius: 6px; padding: 10px 12px; font-family: var(--f-read); font-size: 15px; line-height: 1.5; }
+  .row { display: flex; gap: 10px; align-items: center; justify-content: space-between; flex-wrap: wrap; }
+  .notice { font-family: var(--f-ui); font-size: 13px; color: var(--petrol); background: var(--petrol-soft); border-radius: 6px; padding: 10px 14px; margin-bottom: 20px; }
+  .thread { display: flex; flex-direction: column; gap: 12px; }
+  .cm { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; min-width: 0; }
+  .cm.reply { margin-left: 28px; border-left: 3px solid var(--petrol-soft); }
+  .cm.hidden-cm { opacity: .6; border-style: dashed; }
+  .cm-head { display: flex; gap: 8px; align-items: baseline; flex-wrap: wrap; font-family: var(--f-ui); font-size: 13px; margin-bottom: 6px; }
+  .cm-head b { font-weight: 600; }
+  .cm-head time { color: var(--muted); font-size: 12px; }
+  .chip { font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; background: var(--petrol-soft); color: var(--petrol); }
+  .chip.vorschlag { background: var(--accent-soft); color: var(--accent); }
+  .chip.team { background: var(--ink); color: var(--surface); }
+  .cm-body { white-space: pre-wrap; overflow-wrap: anywhere; font-size: .97rem; line-height: 1.6; }
+  .cm-act { display: flex; gap: 12px; margin-top: 8px; font-family: var(--f-ui); font-size: 12px; }
+  .link { background: none; border: 0; padding: 0; color: var(--petrol); cursor: pointer; font-size: 12px; font-family: var(--f-ui); }
+  .link.danger { color: var(--neg); }
+
+  /* REDAKTION */
+  .desk { display: flex; flex-direction: column; gap: 8px; margin-top: 20px; }
+  .desk-row { display: grid; grid-template-columns: 44px minmax(0, 1fr) auto; gap: 14px; align-items: center; background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+  .desk-row.is-next { border-color: var(--accent); }
+  .desk-row .ord { font-family: var(--f-mono); font-size: 12px; color: var(--muted); }
+  .desk-row h4 { font-size: 1rem; }
+  .desk-row small { display: block; font-family: var(--f-ui); font-size: 12px; color: var(--muted); margin-top: 3px; }
+  .status { font-family: var(--f-mono); font-size: 10px; letter-spacing: .1em; text-transform: uppercase; padding: 2px 6px; border-radius: 3px; margin-right: 6px; }
+  .status.live { background: var(--pos); color: var(--surface); }
+  .status.draft { background: var(--line); color: var(--ink); }
+  .desk-act { display: flex; gap: 6px; flex-wrap: wrap; justify-content: flex-end; }
+  .stats { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin: 20px 0; }
+  .stat { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; font-family: var(--f-ui); }
+  .stat b { display: block; font-family: var(--f-display); font-size: 1.7rem; line-height: 1.1; font-variant-numeric: tabular-nums; }
+  .stat span { font-size: 13px; color: var(--muted); }
+  .toast { position: fixed; left: 50%; bottom: calc(20px + env(safe-area-inset-bottom, 0px)); transform: translateX(-50%); background: var(--ink); color: var(--paper); font-family: var(--f-ui); font-size: 14px; padding: 10px 16px; border-radius: 6px; z-index: 30; max-width: calc(100% - 32px); }
+  footer { border-top: 1px solid var(--line); padding-block: 24px 40px; }
+
+  @media (max-width: 640px) {
+    .cards, .cells, .pincer, .basis, .stats { grid-template-columns: minmax(0, 1fr); }
+    .tl-track { grid-template-columns: minmax(0, 1fr); }
+    .desk-row { grid-template-columns: 32px minmax(0, 1fr); }
+    .desk-act { grid-column: 1 / -1; justify-content: flex-start; }
+    .cm.reply { margin-left: 12px; }
+    .series .label { display: none; }
+  }
+  @media (prefers-reduced-motion: no-preference) { .view { animation: enter .3s ease both; } }
+  @keyframes enter { from { opacity: .5; transform: translateY(6px); } to { opacity: 1; transform: none; } }
+</style>
+
+<header class="head">
+  <div class="wrap">
+    <a class="brand" href="#start"><b>Uns neu umeinander kümmern</b><small>Das Manifest-Blog · Entwurf zur Diskussion</small></a>
+    <div class="series" title="Veröffentlichte Beiträge der Serie"><span class="label">Serie</span><span class="steps" id="steps"></span><span id="stepTxt">–</span></div>
+    <a class="btn" href="#redaktion" id="deskLink" hidden>Redaktion</a>
+  </div>
+</header>
+
+<main class="wrap" id="app">
+  <section class="view" id="loading">
+    <p class="eyebrow">Manifest-Blog</p>
+    <h1>Uns neu umeinander kümmern. <em>Für eine Soziale Marktwirtschaft des 21. Jahrhunderts</em></h1>
+    <p class="ui" style="margin-top:20px">Beiträge werden geladen …</p>
+  </section>
+</main>
+
+<footer class="wrap ui">Ein Manifest-Entwurf in Anlehnung an Klaus Bremen, <em>Uns neu umeinander kümmern</em> (oekom, 2025). Die Beiträge erscheinen Schritt für Schritt. Kommentare und Abstimmungen sehen alle, die diese Seite öffnen können.</footer>
+<div class="toast" id="toast" role="status" hidden></div>
+
+<script>
+(() => {
+  const $ = (s, r = document) => r.querySelector(s);
+  const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+  const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+  // Inhalte kommen aus der Datenbank: escapen, dann nur <em> und <strong> zulassen.
+  const rich = s => esc(s).replace(/&lt;(\/?)(em|strong)&gt;/g, '<$1$2>');
+  const app = $('#app');
+  const KINDS = [['gedanke', 'Gedanke'], ['frage', 'Frage'], ['vorschlag', 'Vorschlag']];
+  const VOTES = [[1, 'Stimme zu'], [0, 'Unentschieden'], [-1, 'Sehe ich anders']];
+  const fmt = ts => ts ? new Date(ts).toLocaleDateString('de-DE', { day: 'numeric', month: 'long', year: 'numeric' }) : '';
+  const fmtT = ts => ts ? new Date(ts).toLocaleString('de-DE', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' }) : '';
+
+  let db = null, user = null, me = null, canEdit = false, canWrite = null, readOnly = false;
+  const S = { posts: null, drafts: null, comments: {}, votes: {}, failed: false, slow: false };
+  let names = {};
+  let deskArm = null, delArm = null, replyTo = null, kind = 'gedanke';
+  const pincerSel = {}, tlSel = {};
+
+  function toast(msg) { const t = $('#toast'); t.textContent = msg; t.hidden = false; clearTimeout(toast.h); toast.h = setTimeout(() => t.hidden = true, 2600); }
+
+  /* ABGELEITETE DATEN */
+  const released = () => (S.posts || []).slice().sort((a, b) => a.order - b.order);
+  const allComments = () => {
+    const out = [];
+    for (const [uid, doc] of Object.entries(S.comments)) {
+      for (const [cid, c] of Object.entries((doc && doc.items) || {})) {
+        if (!c || c.deleted) continue;
+        out.push({ ...c, uid, cid });
+      }
+    }
+    return out.sort((a, b) => (a.at || 0) - (b.at || 0));
+  };
+  const visibleComments = post => allComments().filter(c => c.post === post && (!c.hidden || canEdit || c.uid === me));
+  const tally = key => {
+    const t = { 1: 0, 0: 0, '-1': 0, n: 0 };
+    for (const doc of Object.values(S.votes)) { const v = doc && doc.v && doc.v[key]; if (v === 1 || v === 0 || v === -1) { t[v]++; t.n++; } }
+    return t;
+  };
+  const myVote = key => { const d = S.votes[me]; const v = d && d.v && d.v[key]; return (v === 1 || v === 0 || v === -1) ? v : null; };
+  async function resolveNames(ids) {
+    if (!user || !ids.length) return;
+    try { const ps = await user.profiles(ids); let ch = false; for (const id of ids) { const n = (ps[id] && ps[id].name) || ''; if (names[id] !== n) { names[id] = n; ch = true; } } if (ch) $$('[data-uid]').forEach(el => el.textContent = names[el.dataset.uid] || 'Jemand'); } catch (e) {}
+  }
+
+  /* SERIENLEISTE */
+  function renderSeries() {
+    const total = S.drafts ? S.drafts.length : (S.meta && S.meta.total) || 9;
+    const n = released().length;
+    $('#steps').innerHTML = Array.from({ length: total }, (_, i) => `<i class="${i < n ? 'on' : ''}"></i>`).join('');
+    $('#stepTxt').textContent = `${n} / ${total}`;
+    $('#deskLink').hidden = !canEdit;
+  }
+
+  /* BLÖCKE */
+  function renderBlock(b, post, bi) {
+    switch (b.t) {
+      case 'p': return `<p>${rich(b.h)}</p>`;
+      case 'h3': return `<h3>${b.n ? `<span>${esc(b.n)}</span>` : ''}${rich(b.h)}</h3>`;
+      case 'thesis': return `<div class="thesis"><p>${rich(b.h)}</p></div>`;
+      case 'quote': return `<div class="quote"><p>${rich(b.h)}</p></div>`;
+      case 'orn': return `<div class="orn" aria-hidden="true">§</div>`;
+      case 'final': return `<div class="final"><p class="eyebrow">Die zentrale These</p><p>${rich(b.h)}</p></div>`;
+      case 'basis': return `<div class="basis"><div><p class="eyebrow">Grundlage und Methode</p><p>${rich(b.h)}</p></div><div><p class="eyebrow">Analytische Stränge</p><ul>${(b.items || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul></div></div>`;
+      case 'cells': return `<div class="cells">${(b.items || []).map(c => `<div class="cell"><p class="eyebrow">${esc(c.label)}</p><b>${esc(c.title)}</b>${esc(c.text)}</div>`).join('')}</div>`;
+      case 'cards': return `<div class="cards">${(b.items || []).map(c => `<article class="dcard"><div class="d-head"><span class="d-num">${esc(c.n)}</span><span class="d-field">${esc(c.label)}</span></div><h4>${esc(c.title)}</h4><p>${esc(c.text)}</p>${c.poll ? voteWidget(post, c.poll, '') : ''}</article>`).join('')}</div>`;
+      case 'pincer': return renderPincer(post, bi, b.lines || {});
+      case 'timeline': return renderTimeline(post, bi, b.phases || []);
+      default: return '';
+    }
+  }
+  function renderPincer(post, bi, L) {
+    const key = post.id + ':' + bi, sel = pincerSel[key] || null;
+    const on = e => sel && (e[0] === sel || e[1] === sel);
+    const cls = (e, base) => `${base}${on(e) ? ' on' : sel ? ' dim' : ''}`;
+    const mk = e => on(e) ? 'url(#ah-on)' : 'url(#ah)';
+    const E = { pk: ['p', 'k'], kp: ['k', 'p'], pw: ['p', 'w'], kw: ['k', 'w'] };
+    const node = (k, x, y, r) => `<g class="node${sel === k ? ' on' : ''}" data-pincer="${key}" data-node="${k}" tabindex="0" role="button" aria-pressed="${sel === k}" aria-label="${esc((L[k] || {}).n)}: ${esc((L[k] || {}).t)}"><circle cx="${x}" cy="${y}" r="${r}"/><text class="nl" x="${x}" y="${y - 10}">${esc(((L[k] || {}).n || '').toUpperCase())}</text><text class="nt" x="${x}" y="${y + 12}">${{ p: 'Profitabilität', k: 'Klima', w: 'Wohlfahrt' }[k]}</text></g>`;
+    const d = sel ? L[sel] : null;
+    return `<div class="pincer">
+      <div class="pincer-fig"><svg viewBox="0 0 600 400" role="group" aria-label="Die drei Krisenlinien und ihre Wechselwirkungen">
+        <defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrow" d="M0,0 L10,5 L0,10 z"/></marker>
+        <marker id="ah-on" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path class="arrow-on" d="M0,0 L10,5 L0,10 z"/></marker></defs>
+        <path class="${cls(E.pk, 'edge')}" d="M165,300 Q300,230 435,300" marker-end="${mk(E.pk)}"/>
+        <path class="${cls(E.kp, 'edge')}" d="M435,322 Q300,392 165,322" marker-end="${mk(E.kp)}"/>
+        <path class="${cls(E.pw, 'edge')}" d="M135,262 L262,118" marker-end="${mk(E.pw)}"/>
+        <path class="${cls(E.kw, 'edge')}" d="M465,262 L338,118" marker-end="${mk(E.kw)}"/>
+        <text class="${cls(E.pk, 'edge-label')}" x="300" y="252" text-anchor="middle">schwächt Reaktionsfähigkeit</text>
+        <text class="${cls(E.kp, 'edge-label')}" x="300" y="382" text-anchor="middle">vertieft Stagnation</text>
+        <text class="${cls(E.pw, 'edge-label')}" x="168" y="168" text-anchor="end">untergräbt</text>
+        <text class="${cls(E.pw, 'edge-label')}" x="168" y="186" text-anchor="end">Finanzierung</text>
+        <text class="${cls(E.kw, 'edge-label')}" x="432" y="168">untergräbt</text>
+        <text class="${cls(E.kw, 'edge-label')}" x="432" y="186">Finanzierung</text>
+        ${node('w', 300, 80, 50)}${node('p', 110, 310, 56)}${node('k', 490, 310, 56)}
+      </svg></div>
+      <div class="pincer-detail" aria-live="polite">${d
+        ? `<p class="eyebrow">${esc(d.n)}</p><h4>${esc(d.t)}</h4><p>${esc(d.x)}</p>`
+        : `<p class="eyebrow">Drei Linien, eine Zange</p><h4>Wählen Sie eine Krisenlinie</h4><p>Tippen Sie auf einen Kreis. Die Grafik zeigt dann, wie diese Linie auf die anderen wirkt.</p>`}
+        <div class="pick">${['p', 'k', 'w'].map(k => `<button class="btn" type="button" data-pincer="${key}" data-node="${k}" aria-pressed="${sel === k}">${esc((L[k] || {}).n)}</button>`).join('')}${sel ? `<button class="btn" type="button" data-pincer="${key}" data-node="">Alle zeigen</button>` : ''}</div>
+      </div></div>`;
+  }
+  function renderTimeline(post, bi, P) {
+    const key = post.id + ':' + bi, i = tlSel[key] || 0, ph = P[i] || {};
+    return `<div class="tl-track" role="tablist" aria-label="Zeitebenen">${P.map((p, j) => `<button type="button" role="tab" data-tl="${key}" data-i="${j}" aria-selected="${j === i}"><b>${esc(p.range)}</b><span>${esc(p.name)}</span></button>`).join('')}</div>
+      <div class="tl-panel" role="tabpanel" aria-live="polite"><strong>${esc(ph.title)}</strong><ul>${(ph.items || []).map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>`;
+  }
+
+  /* ABSTIMMUNG */
+  function voteWidget(post, pollId, label) {
+    const key = post.id + ':' + pollId, mine = myVote(key), t = tally(key);
+    const dis = (!db || readOnly || post._preview) ? 'disabled' : '';
+    const pct = v => t.n ? (t[v] / t.n * 100) : 0;
+    return `<div class="vote">${label ? `<div class="vote-q">${esc(label)}</div>` : ''}
+      <div class="vote-btns" role="group" aria-label="Ihre Haltung">${VOTES.map(([v, l]) => `<button type="button" data-vote="${key}" data-v="${v}" aria-pressed="${mine === v}" ${dis}>${l}</button>`).join('')}</div>
+      <div class="tally" aria-hidden="true"><i style="width:${pct(1)}%;background:var(--pos)"></i><i style="width:${pct(0)}%;background:var(--mid)"></i><i style="width:${pct(-1)}%;background:var(--neg)"></i></div>
+      <div class="tally-txt">${t.n ? `${t[1]} Zustimmung · ${t[0]} unentschieden · ${t['-1']} anders · ${t.n} ${t.n === 1 ? 'Stimme' : 'Stimmen'}` : 'Noch keine Stimmen. Geben Sie die erste ab.'}</div></div>`;
+  }
+
+  /* ANSICHTEN */
+  function viewFeed() {
+    const list = released();
+    const counts = p => visibleComments(p).length;
+    let html = `<section class="view intro"><p class="eyebrow">Manifest-Blog</p>
+      <h1>Uns neu umeinander kümmern. <em>Für eine Soziale Marktwirtschaft des 21. Jahrhunderts</em></h1>
+      <p class="lede">Ein Manifest-Entwurf, Kapitel für Kapitel vorgestellt. Lesen Sie mit, stimmen Sie ab, widersprechen Sie, schlagen Sie bessere Formulierungen vor.</p></section>`;
+    if (S.failed && !list.length) return html + `<div class="empty"><b>Die Beiträge können gerade nicht geladen werden.</b>Bitte öffnen Sie die Seite angemeldet in claude.ai. Wenn das nicht hilft, versuchen Sie es später noch einmal.</div>`;
+    if (!S.posts) return html + `<p class="ui">${S.slow ? 'Die Beiträge sind noch nicht erreichbar. Die Seite versucht es weiter.' : 'Beiträge werden geladen …'}</p>`;
+    if (!list.length) return html + `<div class="empty"><b>Der erste Beitrag erscheint in Kürze.</b>${canEdit ? 'Noch ist nichts freigegeben. Öffnen Sie die <a href="#redaktion">Redaktion</a> und geben Sie den Auftakt frei.' : 'Schauen Sie bald wieder vorbei.'}</div>`;
+    const rev = list.slice().reverse(), [latest, ...older] = rev;
+    html += `<div class="feed">
+      <a class="card latest" href="#${esc(latest.id)}"><p class="eyebrow">${esc(latest.kicker)}<span class="new">NEU</span></p><h2>${esc(latest.title)}</h2><p>${esc(latest.teaser)}</p>
+        <div class="meta"><span>${fmt(latest.releasedAt)}</span><span>${latest.readMin || 3} Min. Lesezeit</span><span><b>${counts(latest.id)}</b> Beiträge in der Diskussion</span></div></a>`;
+    if (S.meta && S.meta.nextTitle) html += `<div class="next">Als Nächstes in der Serie<b>${esc(S.meta.nextKicker || '')}${S.meta.nextKicker ? ': ' : ''}${esc(S.meta.nextTitle)}</b></div>`;
+    if (older.length) html += `<p class="eyebrow" style="margin-top:18px">Frühere Beiträge</p>` + older.map(p => `<a class="card" href="#${esc(p.id)}"><p class="eyebrow">${esc(p.kicker)}</p><h4>${esc(p.title)}</h4><p>${esc(p.teaser)}</p><div class="meta"><span>${fmt(p.releasedAt)}</span><span><b>${counts(p.id)}</b> Beiträge in der Diskussion</span></div></a>`).join('');
+    return html + `</div>`;
+  }
+
+  function viewPost(post) {
+    const list = released(), idx = list.findIndex(p => p.id === post.id);
+    const prev = idx > 0 ? list[idx - 1] : null, next = idx >= 0 && idx < list.length - 1 ? list[idx + 1] : null;
+    let html = `<section class="view">`;
+    if (post._preview) html += `<div class="preview-bar"><span>Vorschau: Dieser Beitrag ist noch nicht freigegeben und nur für die Redaktion sichtbar.</span><a class="btn" href="#redaktion">Zur Redaktion</a></div>`;
+    else html += `<a class="back" href="#start">← Alle Beiträge</a>`;
+    html += `<header class="post-head"><p class="eyebrow">${esc(post.kicker)}</p><h2>${esc(post.title)}</h2><div class="meta"><span>${post._preview ? 'Entwurf' : fmt(post.releasedAt)}</span><span>${post.readMin || 3} Min. Lesezeit</span></div></header>`;
+    html += (post.blocks || []).map((b, i) => renderBlock(b, post, i)).join('');
+    html += viewJoin(post);
+    if (!post._preview) html += `<div class="row" style="margin-top:36px">${prev ? `<a class="btn" href="#${esc(prev.id)}">← ${esc(prev.kicker)}</a>` : '<span></span>'}${next ? `<a class="btn primary" href="#${esc(next.id)}">${esc(next.kicker)} →</a>` : '<span></span>'}</div>`;
+    return html + `</section>`;
+  }
+
+  function viewJoin(post) {
+    const pollsInCards = new Set();
+    (post.blocks || []).forEach(b => b.t === 'cards' && (b.items || []).forEach(c => c.poll && pollsInCards.add(c.poll)));
+    const polls = (post.polls || []).filter(p => !pollsInCards.has(p.id));
+    const cms = visibleComments(post.id);
+    const roots = cms.filter(c => !c.parent), kids = id => cms.filter(c => c.parent === id);
+    let html = `<section class="join" id="mitmachen"><p class="eyebrow">Mitmachen</p><h2>Ihre Stimme zu diesem Kapitel</h2>`;
+    html += `<div class="impulse"><p class="eyebrow">Impulsfrage</p><p>${esc(post.impulse)}</p></div>`;
+    if (polls.length) html += `<div class="poll-box">${polls.map(p => voteWidget(post, p.id, p.label)).join('<hr style="border:0;border-top:1px solid var(--line);margin:14px 0">')}</div>`;
+    if (pollsInCards.size) html += `<p class="ui">Ihre Stimmen zu den einzelnen Forderungen geben Sie direkt an den Karten oben ab.</p>`;
+    if (post._preview) html += `<div class="notice">In der Vorschau sind Abstimmung und Kommentare gesperrt.</div>`;
+    else if (!db) html += `<div class="notice">Zum Mitdiskutieren öffnen Sie diese Seite angemeldet in claude.ai.</div>`;
+    else if (readOnly) html += `<div class="notice">Sie können mitlesen. Zum Kommentieren und Abstimmen braucht Ihr Zugang die Stufe „Mitwirken“. Bitten Sie die Redaktion darum.</div>`;
+    else html += composer(post);
+    html += `<p class="eyebrow" style="margin-top:8px">Diskussion · ${roots.length ? cms.length : 'noch leer'}</p>`;
+    html += roots.length ? `<div class="thread">${roots.map(c => comment(c, false) + kids(c.cid).map(k => comment(k, true)).join('') + (replyTo === c.cid && !readOnly && db ? composer(post, c) : '')).join('')}</div>`
+      : `<div class="empty"><b>Noch keine Beiträge zu diesem Kapitel.</b>Beginnen Sie die Diskussion mit einer Antwort auf die Impulsfrage.</div>`;
+    return html + `</section>`;
+  }
+  function composer(post, parent) {
+    const pid = parent ? parent.cid : '';
+    return `<form class="composer${parent ? ' reply' : ''}" data-post="${esc(post.id)}" data-parent="${esc(pid)}">
+      ${parent ? '' : `<div class="kinds" role="group" aria-label="Art des Beitrags">${KINDS.map(([k, l]) => `<button type="button" class="btn" data-kind="${k}" aria-pressed="${kind === k}">${l}</button>`).join('')}</div>`}
+      <label class="ui" for="txt-${esc(post.id)}-${esc(pid || 'root')}">${parent ? 'Ihre Antwort' : kind === 'vorschlag' ? 'Ihr Formulierungsvorschlag' : kind === 'frage' ? 'Ihre Frage' : 'Ihr Gedanke'}</label>
+      <textarea id="txt-${esc(post.id)}-${esc(pid || 'root')}" maxlength="3000" placeholder="${parent ? 'Antworten …' : 'Schreiben Sie hier. Konkrete Erfahrungen helfen am meisten.'}"></textarea>
+      <div class="row"><span class="ui" style="font-size:12px">Ihr Name wird angezeigt. Alle mit Zugang können mitlesen.</span>
+      <span style="display:flex;gap:8px">${parent ? `<button type="button" class="btn" data-cancel>Abbrechen</button>` : ''}<button type="submit" class="btn primary">${parent ? 'Antworten' : 'Veröffentlichen'}</button></span></div></form>`;
+  }
+  function comment(c, isReply) {
+    const mine = c.uid === me, kindL = (KINDS.find(k => k[0] === c.kind) || [, ''])[1];
+    return `<article class="cm${isReply ? ' reply' : ''}${c.hidden ? ' hidden-cm' : ''}">
+      <div class="cm-head"><b data-uid="${esc(c.uid)}">${esc(names[c.uid] || 'Jemand')}</b>${kindL && !isReply ? `<span class="chip ${esc(c.kind)}">${kindL}</span>` : ''}<time>${fmtT(c.at)}</time>${c.hidden ? '<span class="chip">ausgeblendet</span>' : ''}</div>
+      <div class="cm-body">${esc(c.text)}</div>
+      <div class="cm-act">${!isReply && db && !readOnly ? `<button class="link" type="button" data-reply="${esc(c.cid)}">Antworten</button>` : ''}
+        ${mine ? `<button class="link danger" type="button" data-del="${esc(c.uid)}|${esc(c.cid)}">${delArm === c.cid ? 'Wirklich löschen?' : 'Löschen'}</button>` : ''}
+        ${canEdit && !mine ? `<button class="link danger" type="button" data-hide="${esc(c.uid)}|${esc(c.cid)}">${c.hidden ? 'Wieder einblenden' : 'Ausblenden'}</button>` : ''}</div></article>`;
+  }
+
+  function viewDesk() {
+    if (!canEdit) return `<section class="view"><div class="empty"><b>Die Redaktion ist nur für Bearbeitende sichtbar.</b><a href="#start">Zurück zum Blog</a></div></section>`;
+    const drafts = (S.drafts || []).slice().sort((a, b) => a.order - b.order);
+    const live = new Set(released().map(p => p.id));
+    const nextId = (drafts.find(d => !live.has(d.id)) || {}).id;
+    const all = allComments(), voters = Object.values(S.votes).filter(d => d && d.v && Object.values(d.v).some(v => v !== null)).length;
+    const people = new Set(all.map(c => c.uid)); Object.keys(S.votes).forEach(u => people.add(u));
+    let html = `<section class="view"><p class="eyebrow">Redaktion</p><h2>Beiträge freigeben</h2>
+      <p class="ui" style="margin-top:12px">Leserinnen und Leser sehen nur freigegebene Beiträge. Geben Sie die Kapitel nacheinander frei. Der nächste Schritt ist rot umrandet. Prüfen Sie jeden Beitrag vorher in der Vorschau.</p>
+      <div class="stats"><div class="stat"><b>${live.size}<span style="font-size:1rem"> / ${drafts.length}</span></b><span>freigegeben</span></div>
+      <div class="stat"><b>${all.length}</b><span>Kommentare</span></div><div class="stat"><b>${people.size}</b><span>Teilnehmende</span></div></div>`;
+    if (!S.drafts) return html + `<p class="ui">Entwürfe werden geladen …</p></section>`;
+    if (!drafts.length) return html + `<div class="empty"><b>Keine Entwürfe vorhanden.</b>Die Beitragsentwürfe liegen in der Datenbank unter „drafts“.</div></section>`;
+    html += `<div class="desk">` + drafts.map(d => {
+      const isLive = live.has(d.id), p = released().find(x => x.id === d.id), n = all.filter(c => c.post === d.id).length;
+      const arm = deskArm === d.id;
+      return `<div class="desk-row${d.id === nextId ? ' is-next' : ''}"><span class="ord">${String(d.order).padStart(2, '0')}</span>
+        <div><h4>${esc(d.title)}</h4><small><span class="status ${isLive ? 'live' : 'draft'}">${isLive ? 'Online' : 'Entwurf'}</span>${esc(d.kicker)}${isLive ? ` · seit ${fmt(p.releasedAt)} · ${n} Kommentare` : ''}</small></div>
+        <div class="desk-act"><a class="btn" href="#vorschau-${esc(d.id)}">Vorschau</a>
+        ${isLive ? `<button class="btn" type="button" data-sync="${esc(d.id)}">Text aktualisieren</button><button class="btn danger" type="button" data-unrelease="${esc(d.id)}">${arm ? 'Wirklich zurückziehen?' : 'Zurückziehen'}</button>`
+          : `<button class="btn ${d.id === nextId ? 'primary' : ''}" type="button" data-release="${esc(d.id)}">${arm ? 'Jetzt veröffentlichen' : 'Freigeben'}</button>`}</div></div>`;
+    }).join('') + `</div>`;
+    return html + `<p class="ui" style="margin-top:18px">„Text aktualisieren“ übernimmt Änderungen am Entwurf in den bereits veröffentlichten Beitrag. Kommentare und Stimmen bleiben erhalten.</p></section>`;
+  }
+
+  /* ROUTING */
+  let lastRoute = null;
+  function route() {
+    const h = location.hash.slice(1) || 'start';
+    let html;
+    if (h === 'redaktion') html = viewDesk();
+    else if (h.startsWith('vorschau-')) {
+      const d = canEdit && (S.drafts || []).find(x => x.id === h.slice(9));
+      html = d ? viewPost({ ...d, _preview: true }) : viewDesk();
+    } else {
+      const p = released().find(x => x.id === h);
+      html = p ? viewPost(p) : viewFeed();
+    }
+    // Angefangene Texte und Fokus beim Neuzeichnen behalten
+    const same = lastRoute === h, kept = {};
+    if (same) $$('textarea[id]').forEach(t => kept[t.id] = t.value);
+    const focusId = document.activeElement && document.activeElement.id;
+    app.innerHTML = html;
+    if (same) {
+      for (const [id, v] of Object.entries(kept)) { const t = document.getElementById(id); if (t && !t.value) t.value = v; }
+      if (focusId) { const f = document.getElementById(focusId); if (f) { f.focus({ preventScroll: true }); if (f.setSelectionRange) f.setSelectionRange(f.value.length, f.value.length); } }
+    } else { window.scrollTo({ top: 0 }); lastRoute = h; replyTo = null; }
+    renderSeries();
+    const ids = Array.from(new Set($$('[data-uid]').map(el => el.dataset.uid)));
+    resolveNames(ids);
+  }
+  let rq = 0; const render = () => { cancelAnimationFrame(rq); rq = requestAnimationFrame(route); };
+  window.addEventListener('hashchange', route);
+
+  /* SCHREIBEN */
+  async function writeOwn(coll, patch) {
+    const ref = db.collection(coll).doc(me);
+    const exists = !!S[coll === 'comments' ? 'comments' : 'votes'][me];
+    try { if (exists) await ref.update(patch); else await ref.set(patch); return true; }
+    catch (e) {
+      if (e && e.code === 'invalid_argument' && canWrite !== true) { readOnly = true; render(); toast('Ihr Zugang erlaubt nur das Mitlesen.'); }
+      else if (e && e.code === 'quota_exceeded') toast('Der Speicher des Blogs ist voll. Bitte informieren Sie die Redaktion.');
+      else toast('Das hat nicht geklappt. Bitte versuchen Sie es noch einmal.');
+      return false;
+    }
+  }
+  async function release(id, sync) {
+    const d = (S.drafts || []).find(x => x.id === id); if (!d) return;
+    const prev = released().find(p => p.id === id);
+    const body = JSON.parse(JSON.stringify(d)); body.releasedAt = (prev && prev.releasedAt) || Date.now();
+    try {
+      await db.collection('posts').doc(id).set(body);
+      await updateMeta(id, true);
+      toast(sync ? 'Text aktualisiert' : 'Beitrag veröffentlicht');
+    } catch (e) { toast('Freigabe fehlgeschlagen. Bitte noch einmal versuchen.'); }
+  }
+  async function unrelease(id) {
+    try { await db.collection('posts').doc(id).delete(); await updateMeta(id, false); toast('Beitrag zurückgezogen'); }
+    catch (e) { toast('Zurückziehen fehlgeschlagen.'); }
+  }
+  async function updateMeta(changed, isLive) {
+    const live = new Set(released().map(p => p.id)); if (isLive) live.add(changed); else live.delete(changed);
+    const drafts = (S.drafts || []).slice().sort((a, b) => a.order - b.order);
+    const nx = drafts.find(d => !live.has(d.id));
+    await db.doc('meta/series').set({ total: drafts.length, released: live.size, nextTitle: nx ? nx.title : '', nextKicker: nx ? nx.kicker : '' });
+  }
+
+  /* EREIGNISSE */
+  document.addEventListener('click', async e => {
+    const t = e.target.closest('button, g.node'); if (!t) return;
+    const d = t.dataset;
+    if (d.pincer !== undefined && d.node !== undefined) { pincerSel[d.pincer] = (!d.node || pincerSel[d.pincer] === d.node) ? null : d.node; render(); return; }
+    if (d.tl) { tlSel[d.tl] = +d.i; render(); return; }
+    if (d.kind) { kind = d.kind; render(); return; }
+    if (d.vote) {
+      if (!db || readOnly || !me) return;
+      const v = +d.v, cur = myVote(d.vote);
+      await writeOwn('votes', { v: { [d.vote]: cur === v ? null : v } });
+      return;
+    }
+    if (d.reply) { replyTo = replyTo === d.reply ? null : d.reply; render(); return; }
+    if (d.cancel !== undefined) { replyTo = null; render(); return; }
+    if (d.del) {
+      const [uid, cid] = d.del.split('|');
+      if (delArm !== cid) { delArm = cid; render(); setTimeout(() => { if (delArm === cid) { delArm = null; render(); } }, 4000); return; }
+      delArm = null;
+      if (await writeOwn('comments', { items: { [cid]: { deleted: true, text: '' } } })) toast('Kommentar gelöscht');
+      return;
+    }
+    if (d.hide && canEdit) {
+      const [uid, cid] = d.hide.split('|'); const c = (S.comments[uid] && S.comments[uid].items || {})[cid]; if (!c) return;
+      try { await db.collection('comments').doc(uid).update({ items: { [cid]: { hidden: !c.hidden } } }); toast(c.hidden ? 'Wieder eingeblendet' : 'Ausgeblendet'); } catch (err) { toast('Das hat nicht geklappt.'); }
+      return;
+    }
+    if (d.release || d.unrelease) {
+      const id = d.release || d.unrelease;
+      if (deskArm !== id) { deskArm = id; render(); setTimeout(() => { if (deskArm === id) { deskArm = null; render(); } }, 5000); return; }
+      deskArm = null; t.disabled = true;
+      if (d.release) await release(id, false); else await unrelease(id);
+      return;
+    }
+    if (d.sync) { t.disabled = true; await release(d.sync, true); return; }
+  });
+  document.addEventListener('keydown', e => {
+    const n = e.target.closest && e.target.closest('g.node');
+    if (n && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); n.dispatchEvent(new MouseEvent('click', { bubbles: true })); }
+  });
+  document.addEventListener('submit', async e => {
+    const f = e.target.closest('.composer'); if (!f) return;
+    e.preventDefault();
+    const ta = $('textarea', f), text = ta.value.trim();
+    if (!text) { ta.focus(); toast('Bitte schreiben Sie zuerst etwas.'); return; }
+    if (!db || readOnly || !me) return;
+    const btn = $('button[type="submit"]', f); btn.disabled = true;
+    const cid = 'c' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6);
+    const item = { post: f.dataset.post, text: text.slice(0, 3000), kind: f.dataset.parent ? 'antwort' : kind, at: Date.now() };
+    if (f.dataset.parent) item.parent = f.dataset.parent;
+    const ok = await writeOwn('comments', { items: { [cid]: item } });
+    btn.disabled = false;
+    if (ok) { ta.value = ''; if (f.dataset.parent) replyTo = null; toast('Danke für Ihren Beitrag!'); render(); }
+  });
+
+  /* START */
+  function listen(coll, onDocs) {
+    return db.collection(coll).onSnapshot(snap => { onDocs(snap); render(); }, err => { if (coll === 'posts') { S.failed = true; render(); } });
+  }
+  async function boot() {
+    route();
+    const timer = setTimeout(() => { S.slow = true; if (!db) S.failed = true; render(); }, 10000);
+    [db, user] = await Promise.all([claude.use('db'), claude.use('user')]);
+    if (user) {
+      try { me = await user.id(); } catch (e) {}
+      try { canEdit = !!(await user.canEdit()); } catch (e) {}
+      try { canWrite = await user.can('data.write'); } catch (e) { canWrite = null; }
+    }
+    if (!db) { clearTimeout(timer); S.failed = true; render(); return; }
+    if (canWrite === false && !canEdit) readOnly = true;
+    if (!me) readOnly = true;
+    listen('posts', snap => { S.posts = snap.docs.filter(d => d.exists).map(d => ({ ...d.data(), id: d.id })); if (!snap.metadata.fromCache) clearTimeout(timer); });
+    db.doc('meta/series').onSnapshot(s => { S.meta = s.exists ? s.data() : null; render(); }, () => {});
+    listen('comments', snap => { const o = {}; snap.docs.forEach(d => { if (d.exists) o[d.id] = d.data(); }); S.comments = o; });
+    listen('votes', snap => { const o = {}; snap.docs.forEach(d => { if (d.exists) o[d.id] = d.data(); }); S.votes = o; });
+    if (canEdit) listen('drafts', snap => { S.drafts = snap.docs.filter(d => d.exists).map(d => ({ ...d.data(), id: d.id })); });
+    render();
+  }
+  if (window.claude && claude.use) boot(); else { S.failed = true; route(); }
+})();
+</script>
