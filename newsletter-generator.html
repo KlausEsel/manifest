@@ -1,0 +1,969 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Newsletter-Generator · Klaus Bremen</title>
+<style>
+  /* Oberfläche des Werkzeugs (nicht der Newsletter selbst).
+     Farben übernommen von klaus-bremen.de: Primärblau #1d4f9a, Dunkelblau #112f5c, Mint #2ff088. */
+  :root {
+    --blue: #1d4f9a; --blue-dark: #112f5c; --mint: #2ff088; --ink: #212529; --muted: #5c636a;
+    --line: #dee2e6; --paper: #f3f5f8; --surface: #ffffff; --tint: #eef3fa; --warn-bg: #fff4d6; --warn: #7a5300;
+    --err: #a4232f; --ok: #136036;
+    --f: "Segoe UI", Arial, Helvetica, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; height: 100%; }
+  body { display: flex; flex-direction: column; }
+  body { font-family: var(--f); font-size: 15px; color: var(--ink); background: var(--paper); line-height: 1.45; }
+  button, input, textarea, select { font: inherit; color: inherit; }
+  a { color: var(--blue); }
+
+  .topbar { position: sticky; top: 0; z-index: 20; display: flex; flex-wrap: wrap; gap: 10px 16px; align-items: center;
+    padding: 10px 16px; background: var(--blue); color: #fff; border-bottom: 4px solid var(--mint); }
+  .topbar h1 { font-size: 18px; margin: 0; font-weight: 700; letter-spacing: .01em; }
+  .topbar h1 span { font-weight: 400; opacity: .85; }
+  .topbar .spacer { flex: 1; }
+  .topbar .actions { display: flex; flex-wrap: wrap; gap: 8px; }
+  .btn { display: inline-flex; align-items: center; gap: 6px; border: 1px solid transparent; border-radius: 6px;
+    padding: 8px 14px; cursor: pointer; font-weight: 600; background: #fff; color: var(--blue-dark); line-height: 1.2; }
+  .btn:hover { filter: brightness(.95); }
+  .btn:focus-visible, input:focus-visible, textarea:focus-visible, select:focus-visible, summary:focus-visible {
+    outline: 3px solid var(--mint); outline-offset: 2px; }
+  .btn.primary { background: var(--mint); color: var(--blue-dark); }
+  .btn.ghost { background: transparent; color: #fff; border-color: rgba(255,255,255,.6); }
+  .btn.small { padding: 4px 10px; font-size: 13px; font-weight: 600; background: var(--tint); color: var(--blue-dark); border-color: #c9d6ea; }
+  .btn.danger { color: var(--err); }
+  .btn[disabled] { opacity: .45; cursor: not-allowed; }
+
+  .layout { display: grid; grid-template-columns: minmax(360px, 520px) 1fr; gap: 0; flex: 1; min-height: 0; }
+  .form-pane { overflow-y: auto; padding: 16px 16px 80px; border-right: 1px solid var(--line); background: var(--paper); }
+  .preview-pane { overflow: hidden; display: flex; flex-direction: column; background: #e3e7ee; }
+  @media (max-width: 900px) {
+    body { display: block; }
+    .layout { grid-template-columns: 1fr; }
+    .form-pane { border-right: 0; overflow: visible; }
+    .preview-pane { min-height: 80vh; }
+  }
+
+  .guide { background: var(--surface); border: 1px solid var(--line); border-left: 5px solid var(--mint); border-radius: 8px; margin-bottom: 14px; }
+  .guide > summary { padding: 12px 14px; font-weight: 700; cursor: pointer; color: var(--blue-dark); }
+  .guide .inner { padding: 0 16px 14px; }
+  .guide ol { margin: 4px 0 10px; padding-left: 22px; }
+  .guide li { margin-bottom: 6px; }
+  .guide h3 { font-size: 14px; margin: 14px 0 4px; color: var(--blue-dark); }
+  .guide p, .guide ul { margin: 4px 0; font-size: 14px; }
+  .guide ul { padding-left: 20px; }
+
+  .section { background: var(--surface); border: 1px solid var(--line); border-radius: 8px; margin-bottom: 12px; }
+  .section > summary { display: flex; align-items: center; gap: 10px; padding: 12px 14px; cursor: pointer; list-style: none; font-weight: 700; color: var(--blue-dark); }
+  .section > summary::-webkit-details-marker { display: none; }
+  .section > summary::before { content: "▸"; color: var(--blue); transition: transform .15s; }
+  .section[open] > summary::before { transform: rotate(90deg); }
+  .section > summary .letter { display: inline-grid; place-items: center; width: 24px; height: 24px; border-radius: 50%; background: var(--tint); font-size: 12px; }
+  .section > summary .toggle { margin-left: auto; font-weight: 400; font-size: 13px; color: var(--muted); display: flex; align-items: center; gap: 6px; }
+  .section .body { padding: 0 14px 14px; }
+  .section.off .body { opacity: .5; }
+
+  label.f { display: block; margin: 10px 0 0; font-weight: 600; font-size: 13px; color: #343a40; }
+  label.f small { font-weight: 400; color: var(--muted); }
+  input[type=text], input[type=url], input[type=email], textarea, select {
+    display: block; width: 100%; margin-top: 4px; padding: 8px 10px; border: 1px solid #c3cad3; border-radius: 6px; background: #fff; }
+  textarea { min-height: 96px; resize: vertical; line-height: 1.5; }
+  .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .hint { font-size: 12.5px; color: var(--muted); margin: 6px 0 0; }
+  .check { display: flex; gap: 8px; align-items: center; margin-top: 10px; font-size: 14px; }
+
+  .card { border: 1px solid var(--line); border-radius: 8px; padding: 10px 12px 12px; margin-top: 12px; background: #fbfcfd; }
+  .card-head { display: flex; align-items: center; gap: 6px; }
+  .card-head strong { flex: 1; color: var(--blue-dark); }
+  .drop { margin-top: 8px; border: 2px dashed #b5c3d8; border-radius: 8px; padding: 12px; text-align: center; color: var(--muted);
+    font-size: 13.5px; background: #fff; cursor: pointer; }
+  .drop.over { border-color: var(--blue); background: var(--tint); color: var(--blue-dark); }
+  .drop input { display: none; }
+  .thumb { display: flex; gap: 10px; align-items: center; margin-top: 8px; font-size: 12.5px; color: var(--muted); }
+  .thumb img { width: 96px; height: 64px; object-fit: cover; border-radius: 4px; border: 1px solid var(--line); }
+  .gallery-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; margin-top: 10px; }
+  .gitem { border: 1px solid var(--line); border-radius: 8px; padding: 6px; background: #fff; }
+  .gitem img { width: 100%; aspect-ratio: 3/2; object-fit: cover; border-radius: 4px; display: block; }
+  .gitem input { font-size: 12.5px; padding: 5px 7px; }
+  .gitem .gbar { display: flex; gap: 4px; margin-top: 4px; }
+
+  .preview-bar { display: flex; flex-wrap: wrap; gap: 8px; align-items: center; padding: 8px 12px; background: #fff; border-bottom: 1px solid var(--line); font-size: 13.5px; }
+  .seg { display: inline-flex; border: 1px solid #c3cad3; border-radius: 6px; overflow: hidden; }
+  .seg button { border: 0; background: #fff; padding: 6px 12px; cursor: pointer; }
+  .seg button[aria-pressed=true] { background: var(--blue); color: #fff; }
+  .preview-bar .meter { margin-left: auto; color: var(--muted); }
+  .preview-bar .meter.warn { color: var(--err); font-weight: 700; }
+  .envelope { background: #fff; margin: 12px auto 0; width: calc(100% - 24px); max-width: 700px; border-radius: 6px 6px 0 0; padding: 8px 12px; font-size: 13px; color: #343a40; border: 1px solid var(--line); border-bottom: 0; }
+  .envelope div { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .envelope b { display: inline-block; width: 56px; color: var(--muted); font-weight: 600; }
+  .frame-wrap { flex: 1; overflow: auto; padding: 0 12px 24px; }
+  #preview { display: block; margin: 0 auto; width: 100%; max-width: 700px; height: 100%; min-height: 600px; border: 1px solid var(--line); background: #fff; }
+  #preview.mobile { max-width: 390px; }
+
+  .banner { margin: 0 0 12px; padding: 10px 12px; border-radius: 8px; font-size: 14px; display: none; }
+  .banner.show { display: block; }
+  .banner.warn { background: var(--warn-bg); color: var(--warn); border: 1px solid #f0d58a; }
+  .toast { position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%) translateY(20px); background: var(--blue-dark); color: #fff;
+    padding: 10px 18px; border-radius: 8px; opacity: 0; transition: .25s; pointer-events: none; z-index: 50; max-width: 90vw; }
+  .toast.show { opacity: 1; transform: translateX(-50%); }
+  .toolrow { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; }
+  .saved { font-size: 12.5px; color: rgba(255,255,255,.85); }
+  .sr { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <h1>Newsletter-Generator <span>· Klaus Bremen</span></h1>
+  <span class="saved" id="savedState" aria-live="polite"></span>
+  <span class="spacer"></span>
+  <div class="actions">
+    <button class="btn" id="btnCopy" type="button" title="Formatiert kopieren und in eine neue Outlook-Mail einfügen">📋 In Zwischenablage kopieren</button>
+    <button class="btn primary" id="btnEml" type="button" title="Outlook-Entwurf mit eingebetteten Bildern">✉️ Als .eml herunterladen</button>
+    <button class="btn ghost" id="btnHtml" type="button" title="Reserve: HTML-Datei mit eingebetteten Bildern">HTML herunterladen</button>
+  </div>
+</header>
+
+<div class="layout">
+  <main class="form-pane" id="form">
+    <div class="banner warn" id="sizeWarn" role="alert"></div>
+
+    <details class="guide" id="guide" open>
+      <summary>Kurzanleitung in 5 Schritten</summary>
+      <div class="inner">
+        <ol>
+          <li><b>Ausfüllen:</b> Texte eintragen, Fotos per Klick oder Ziehen einfügen. Nicht benötigte Bausteine rechts oben im Kasten ausschalten.</li>
+          <li><b>Vorschau prüfen:</b> rechts auch die Ansichten „Handy“ und „Dunkel“ ansehen, Links anklicken.</li>
+          <li><b>.eml laden:</b> „Als .eml herunterladen“ klicken und die Datei doppelklicken. Outlook öffnet einen fertigen Entwurf.</li>
+          <li><b>BCC eintragen:</b> In „An“ steht die eigene Adresse. Alle Empfänger kommen in „BCC“ (in Outlook: <i>Optionen → Bcc anzeigen</i>). Vorher eine Testmail nur an sich selbst schicken.</li>
+          <li><b>Senden.</b> Danach für die nächste Ausgabe „Neue Ausgabe beginnen“ wählen.</li>
+        </ol>
+        <details>
+          <summary style="cursor:pointer;font-weight:600;color:var(--blue-dark)">Wichtig zu Versand und Datenschutz</summary>
+          <h3>Versandgrenzen Microsoft 365 (Exchange Online)</h3>
+          <ul>
+            <li>Höchstens 500 Empfänger pro Nachricht (An + Cc + Bcc zusammen) und 10.000 Empfänger pro Tag und Postfach.</li>
+            <li>Höchstens 30 Nachrichten pro Minute. Bei unter 100 Empfängern also eine Mail mit allen in BCC, nicht einzeln senden.</li>
+            <li>Die Organisation kann niedrigere Grenzen setzen. Bei Unzustellbarkeitsmeldungen die IT fragen.</li>
+            <li>Die gesamte Mail sollte unter ca. 5 MB bleiben, sonst landet sie eher im Spam oder wird abgewiesen.</li>
+          </ul>
+          <h3>Empfängerliste nach DSGVO</h3>
+          <ul>
+            <li>Nur Personen anschreiben, die dem Empfang nachweisbar zugestimmt haben (Datum und Weg der Einwilligung notieren; ideal: Bestätigung per Rückmail).</li>
+            <li>Empfänger immer in <b>BCC</b>. Offene Verteiler in „An“ oder „Cc“ machen Adressen für alle sichtbar und sind eine Datenpanne.</li>
+            <li>Liste geschützt ablegen (z. B. als Outlook-Kontaktgruppe im Postfach von officeteam), nicht als lose Datei verschicken.</li>
+            <li>Abmeldungen sofort umsetzen und mit Datum vermerken. Der Abmeldehinweis steht in jedem Newsletter.</li>
+          </ul>
+          <p class="hint">Dies ist eine praktische Orientierung, keine Rechtsberatung.</p>
+        </details>
+      </div>
+    </details>
+
+    <div class="toolrow">
+      <button class="btn small" type="button" id="btnNew">Neue Ausgabe beginnen</button>
+      <button class="btn small" type="button" id="btnDemo">Demo-Beispiel laden</button>
+      <button class="btn small" type="button" id="btnSaveJson" title="Alle Eingaben inkl. Fotos als Datei sichern">Entwurf als Datei sichern</button>
+      <label class="btn small" style="cursor:pointer">Entwurf öffnen<input type="file" id="fileJson" accept=".json,application/json" class="sr"></label>
+    </div>
+
+    <div id="sections"></div>
+  </main>
+
+  <section class="preview-pane" aria-label="Live-Vorschau">
+    <div class="preview-bar">
+      <span class="seg" role="group" aria-label="Breite">
+        <button type="button" id="viewDesktop" aria-pressed="true">Desktop</button>
+        <button type="button" id="viewMobile" aria-pressed="false">Handy</button>
+      </span>
+      <span class="seg" role="group" aria-label="Farbmodus">
+        <button type="button" id="viewLight" aria-pressed="true">Hell</button>
+        <button type="button" id="viewDark" aria-pressed="false">Dunkel</button>
+      </span>
+      <span class="meter" id="meter"></span>
+    </div>
+    <div class="frame-wrap">
+      <div class="envelope" id="envelope"></div>
+      <iframe id="preview" title="Vorschau des Newsletters"></iframe>
+    </div>
+  </section>
+</div>
+
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+"use strict";
+/* =====================================================================
+   Newsletter-Generator „Klaus Bremen“ – läuft offline, ohne Abhängigkeiten.
+   ===================================================================== */
+
+// ---------- Farben & Schriften des Newsletters (von klaus-bremen.de) ----------
+const C = {
+  primary: "#1d4f9a",   // Primärblau der Website
+  dark:    "#112f5c",   // abgedunkeltes Primärblau
+  accent:  "#2ff088",   // Mint (Bootstrap „secondary“ der Website)
+  text:    "#212529",   // Fließtext
+  muted:   "#5c636a",   // Bildunterschriften (6,1:1 auf Weiß)
+  page:    "#eef1f5",   // Hintergrund um die Karte
+  card:    "#ffffff",
+  tint:    "#eef3fa",   // Zitatfläche
+  foot:    "#f8f9fa",
+  line:    "#dee2e6",
+  headSub: "#c9dcf5"    // helle Schrift auf Blau (5,7:1)
+};
+const SANS = "Arial, Helvetica, sans-serif";
+const SERIF = "Georgia, 'Times New Roman', Times, serif";
+const W = 600, PAD = 32, INNER = W - 2 * PAD; // 536 px Inhaltsbreite
+const MAX_IMG_W = 1200, GALLERY_IMG_W = 640, JPEG_Q = 0.8, WARN_BYTES = 5 * 1024 * 1024;
+
+// Dunkelmodus-Regeln (Apple Mail, iOS, Outlook.com/App über data-ogsc/ogsb). Klassisches Outlook ignoriert sie.
+const DARK = {
+  ".nl-page": "background-color:#0d1520 !important;",
+  ".nl-card": "background-color:#121a26 !important;",
+  ".nl-head": "background-color:#163d78 !important;",
+  ".nl-text": "color:#e8eef7 !important;",
+  ".nl-title": "color:#8fb6ef !important;",
+  ".nl-muted": "color:#b8c4d4 !important;",
+  ".nl-link": "color:#8fb6ef !important;",
+  ".nl-tint": "background-color:#16243a !important;",
+  ".nl-quote": "color:#e8eef7 !important;",
+  ".nl-foot": "background-color:#0d1520 !important;",
+  ".nl-rule": "border-color:#2b3a50 !important;"
+};
+
+// ---------- Zustand ----------
+const DEFAULT_FOOTER = {
+  senderName: "officeteam",
+  senderEmail: "office.team@tilworks.de",
+  contactText: "Fragen, Anregungen, Rückmeldungen? Schreiben Sie uns:",
+  imprintLabel: "Impressum",
+  imprintUrl: "https://klaus-bremen.de/",
+  unsubscribe: "Wenn Sie den Newsletter nicht mehr erhalten möchten, antworten Sie einfach auf diese E-Mail.",
+  note: "Sie erhalten diesen Newsletter, weil Sie dem Empfang zugestimmt haben."
+};
+
+function emptyArticle() { return { title: "", image: null, alt: "", caption: "", text: "", btnLabel: "", btnUrl: "" }; }
+
+function blankState(keepFooter) {
+  const today = new Date();
+  return {
+    v: 1,
+    show: { issue: true, intro: true, articles: true, gallery: false, quote: false, footer: true },
+    meta: { issue: "", date: today.toLocaleDateString("de-DE", { day: "numeric", month: "long", year: "numeric" }), subject: "", preheader: "" },
+    intro: { title: "", text: "", signature: "Ihr Klaus Bremen" },
+    articles: [emptyArticle()],
+    gallery: { title: "", cols: 2, images: [] },
+    quote: { text: "", source: "" },
+    footer: Object.assign({}, DEFAULT_FOOTER, keepFooter || {})
+  };
+}
+
+let state = blankState();
+
+// ---------- Hilfsfunktionen ----------
+const $ = (s, r = document) => r.querySelector(s);
+const esc = s => String(s == null ? "" : s).replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+function safeUrl(u) {
+  u = String(u || "").trim();
+  if (!u) return "";
+  if (/^(https?:|mailto:|tel:)/i.test(u)) return u;
+  if (/^[\w.+-]+@[\w-]+\.[\w.-]+$/.test(u)) return "mailto:" + u;
+  if (/^www\./i.test(u) || /^[\w-]+\.[a-z]{2,}/i.test(u)) return "https://" + u;
+  return "";
+}
+function toast(msg, ms = 3200) {
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toast._t); toast._t = setTimeout(() => t.classList.remove("show"), ms);
+}
+function bytesOfDataUrl(d) { if (!d) return 0; const i = d.indexOf(","); return Math.floor((d.length - i - 1) * 3 / 4); }
+function fmtMB(b) { return (b / 1048576).toLocaleString("de-DE", { maximumFractionDigits: 1, minimumFractionDigits: 1 }) + " MB"; }
+function getPath(obj, path) { return path.split(".").reduce((o, k) => (o == null ? o : o[k]), obj); }
+function setPath(obj, path, val) {
+  const ks = path.split("."); const last = ks.pop();
+  const tgt = ks.reduce((o, k) => o[k], obj); tgt[last] = val;
+}
+
+// Einfache Textformatierung: Leerzeile = Absatz, **fett**, [Linktext](https://…)
+function richText(text, color, linkColor, extraStyle = "") {
+  const paras = String(text || "").trim().split(/\n\s*\n/).filter(p => p.trim());
+  return paras.map((p, i) => {
+    let h = esc(p.trim());
+    h = h.replace(/\*\*(.+?)\*\*/g, "<strong>$1</strong>");
+    h = h.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, (m, t, u) => {
+      const url = safeUrl(u.replace(/&amp;/g, "&"));
+      return url ? `<a href="${esc(url)}" target="_blank" class="nl-link" style="color:${linkColor};text-decoration:underline;">${t}</a>` : t;
+    });
+    h = h.replace(/\n/g, "<br>");
+    const mb = i === paras.length - 1 ? 0 : 16;
+    return `<p class="nl-text" style="margin:0 0 ${mb}px 0;font-family:${SANS};font-size:16px;line-height:26px;mso-line-height-rule:exactly;color:${color};${extraStyle}">${h}</p>`;
+  }).join("\n");
+}
+function plainText(text) {
+  return String(text || "").trim().replace(/\*\*(.+?)\*\*/g, "$1").replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, "$1 ($2)");
+}
+
+// ---------- Bildverarbeitung ----------
+let imgSeq = 1;
+function loadImage(src) {
+  return new Promise((res, rej) => { const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error("Bild konnte nicht gelesen werden")); im.src = src; });
+}
+function readFile(file) {
+  return new Promise((res, rej) => { const r = new FileReader(); r.onload = () => res(r.result); r.onerror = () => rej(r.error); r.readAsDataURL(file); });
+}
+/** Verkleinert auf maxW (JPEG ~80 %). crop: Seitenverhältnis (z. B. 1.5 für 3:2) – mittig zugeschnitten. */
+async function processImage(file, maxW, crop) {
+  if (!/^image\//.test(file.type)) throw new Error(`„${file.name}“ ist kein Bild.`);
+  const src = await readFile(file);
+  const im = await loadImage(src);
+  let sx = 0, sy = 0, sw = im.naturalWidth, sh = im.naturalHeight;
+  if (crop) {
+    if (sw / sh > crop) { const nw = Math.round(sh * crop); sx = Math.round((sw - nw) / 2); sw = nw; }
+    else { const nh = Math.round(sw / crop); sy = Math.round((sh - nh) / 2); sh = nh; }
+  }
+  const scale = Math.min(1, maxW / sw);
+  const w = Math.round(sw * scale), h = Math.round(sh * scale);
+  const cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+  const ctx = cv.getContext("2d");
+  ctx.fillStyle = "#ffffff"; ctx.fillRect(0, 0, w, h); // Transparenz → Weiß (JPEG)
+  ctx.imageSmoothingQuality = "high";
+  ctx.drawImage(im, sx, sy, sw, sh, 0, 0, w, h);
+  return { id: "i" + Date.now().toString(36) + (imgSeq++), data: cv.toDataURL("image/jpeg", JPEG_Q), w, h, name: file.name };
+}
+
+// ---------- E-Mail-HTML erzeugen ----------
+/**
+ * opts.img(image) → src (Data-URL, cid:… oder Blob-URL)
+ * opts.forceDark  → Dunkelregeln ohne Media-Query (nur für die Vorschau)
+ * opts.fragment   → nur den Body-Inhalt liefern (Zwischenablage)
+ */
+function renderEmail(s, opts) {
+  const img = opts.img;
+  const rows = [];
+  const spacer = h => `<tr><td height="${h}" style="height:${h}px;font-size:0;line-height:0;mso-line-height-rule:exactly;">&nbsp;</td></tr>`;
+  const imgTag = (im, w, alt) => {
+    const h = Math.round(im.h * w / im.w);
+    return `<img src="${esc(img(im))}" width="${w}" height="${h}" alt="${esc(alt)}" border="0" style="display:block;width:100%;max-width:${w}px;height:auto;border:0;outline:none;text-decoration:none;-ms-interpolation-mode:bicubic;">`;
+  };
+  const button = (label, url) => `
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="border-collapse:separate;">
+  <tr><td align="center" bgcolor="${C.accent}" style="background-color:${C.accent};border-radius:4px;mso-padding-alt:12px 24px;">
+    <a href="${esc(url)}" target="_blank" class="nl-btn" style="display:inline-block;padding:12px 24px;font-family:${SANS};font-size:16px;line-height:20px;mso-line-height-rule:exactly;font-weight:bold;color:${C.dark};text-decoration:none;border-radius:4px;">${esc(label)}&nbsp;&rarr;</a>
+  </td></tr>
+</table>`;
+  const h2 = (t, cls = "nl-title", color = C.primary) =>
+    `<h2 class="${cls}" style="margin:0 0 12px 0;font-family:${SANS};font-size:22px;line-height:28px;mso-line-height-rule:exactly;font-weight:bold;color:${color};">${esc(t)}</h2>`;
+
+  // Kopf
+  const issueLine = s.show.issue ? [s.meta.issue, s.meta.date].filter(x => x && x.trim()).map(esc).join(" &middot; ") : "";
+  rows.push(`
+<tr><td class="nl-head nl-px" bgcolor="${C.primary}" style="background-color:${C.primary};padding:32px ${PAD}px 28px ${PAD}px;">
+  ${issueLine ? `<p style="margin:0 0 10px 0;font-family:${SANS};font-size:13px;line-height:18px;letter-spacing:1px;text-transform:uppercase;color:${C.headSub};">${issueLine}</p>` : ""}
+  <h1 class="nl-h1" style="margin:0;font-family:${SANS};font-size:40px;line-height:46px;mso-line-height-rule:exactly;font-weight:bold;color:#ffffff;">Newsletter</h1>
+  <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="margin:14px 0 14px 0;"><tr><td width="64" height="4" bgcolor="${C.accent}" style="width:64px;height:4px;background-color:${C.accent};font-size:0;line-height:0;">&nbsp;</td></tr></table>
+  <p style="margin:0;font-family:${SANS};font-size:18px;line-height:26px;mso-line-height-rule:exactly;color:#ffffff;">Klaus Bremen für den künftigen sozialen Staat</p>
+</td></tr>`);
+
+  const block = inner => `<tr><td class="nl-px" style="padding:0 ${PAD}px;">${inner}</td></tr>`;
+  const rule = () => `<tr><td class="nl-px" style="padding:0 ${PAD}px;"><table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0"><tr><td class="nl-rule" style="border-top:1px solid ${C.line};font-size:0;line-height:0;height:1px;">&nbsp;</td></tr></table></td></tr>`;
+  let first = true;
+  const sep = () => { if (first) { rows.push(spacer(32)); first = false; } else { rows.push(spacer(28)); rows.push(rule()); rows.push(spacer(28)); } };
+
+  // Einleitung
+  if (s.show.intro && (s.intro.title.trim() || s.intro.text.trim())) {
+    sep();
+    let inner = s.intro.title.trim() ? h2(s.intro.title) : "";
+    inner += richText(s.intro.text, C.text, C.primary);
+    if (s.intro.signature.trim()) inner += `<p class="nl-text" style="margin:16px 0 0 0;font-family:${SERIF};font-style:italic;font-size:17px;line-height:26px;color:${C.text};">${esc(s.intro.signature)}</p>`;
+    rows.push(block(inner));
+  }
+
+  // Artikel
+  if (s.show.articles) {
+    s.articles.forEach(a => {
+      if (!(a.title.trim() || a.text.trim() || a.image)) return;
+      sep();
+      let inner = "";
+      if (a.image) {
+        inner += imgTag(a.image, INNER, a.alt || a.caption || a.title);
+        inner += a.caption.trim()
+          ? `<p class="nl-muted" style="margin:8px 0 16px 0;font-family:${SANS};font-size:13px;line-height:19px;color:${C.muted};">${esc(a.caption)}</p>`
+          : `<div style="height:16px;line-height:16px;font-size:0;">&nbsp;</div>`;
+      }
+      if (a.title.trim()) inner += h2(a.title);
+      inner += richText(a.text, C.text, C.primary);
+      const url = safeUrl(a.btnUrl);
+      if (a.btnLabel.trim() && url) inner += `<div style="height:20px;line-height:20px;font-size:0;">&nbsp;</div>` + button(a.btnLabel.trim(), url);
+      rows.push(block(inner));
+    });
+  }
+
+  // Zitat
+  if (s.show.quote && s.quote.text.trim()) {
+    sep();
+    rows.push(block(`
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+  <tr><td class="nl-tint" bgcolor="${C.tint}" style="background-color:${C.tint};border-left:5px solid ${C.accent};padding:22px 24px 22px 22px;">
+    <p class="nl-muted" style="margin:0 0 10px 0;font-family:${SANS};font-size:12px;line-height:16px;letter-spacing:1px;text-transform:uppercase;font-weight:bold;color:${C.muted};">Satz der Woche</p>
+    <p class="nl-quote" style="margin:0;font-family:${SERIF};font-style:italic;font-size:21px;line-height:31px;mso-line-height-rule:exactly;color:${C.dark};">&bdquo;${esc(s.quote.text.trim()).replace(/\n/g, "<br>")}&ldquo;</p>
+    ${s.quote.source.trim() ? `<p class="nl-muted" style="margin:12px 0 0 0;font-family:${SANS};font-size:14px;line-height:20px;color:${C.muted};">&mdash; ${esc(s.quote.source)}</p>` : ""}
+  </td></tr>
+</table>`));
+  }
+
+  // Galerie
+  const gimgs = s.gallery.images;
+  if (s.show.gallery && gimgs.length) {
+    sep();
+    const cols = Math.min(Number(s.gallery.cols) || 2, 3);
+    const gap = cols === 3 ? 10 : 12;
+    const cw = Math.floor((INNER - gap * (cols - 1)) / cols);
+    let inner = s.gallery.title.trim() ? h2(s.gallery.title) : "";
+    inner += `<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">`;
+    for (let r = 0; r < gimgs.length; r += cols) {
+      if (r) inner += `<tr><td colspan="${cols * 2 - 1}" height="${gap}" style="height:${gap}px;font-size:0;line-height:0;">&nbsp;</td></tr>`;
+      inner += "<tr>";
+      for (let c = 0; c < cols; c++) {
+        const g = gimgs[r + c];
+        if (c) inner += `<td width="${gap}" style="width:${gap}px;font-size:0;line-height:0;">&nbsp;</td>`;
+        inner += `<td width="${cw}" valign="top" style="width:${cw}px;">${g ? imgTag(g, cw, g.alt || "Foto") : "&nbsp;"}</td>`;
+      }
+      inner += "</tr>";
+    }
+    inner += "</table>";
+    rows.push(block(inner));
+  }
+
+  rows.push(spacer(36));
+
+  // Fußbereich
+  if (s.show.footer) {
+    const f = s.footer;
+    const mail = f.senderEmail.trim();
+    const iu = safeUrl(f.imprintUrl);
+    const small = (html, mb = 10) => `<p class="nl-muted" style="margin:0 0 ${mb}px 0;font-family:${SANS};font-size:13px;line-height:20px;color:#495057;">${html}</p>`;
+    const lnk = (href, t) => `<a href="${esc(href)}" target="_blank" class="nl-link" style="color:${C.primary};text-decoration:underline;">${esc(t)}</a>`;
+    let inner = "";
+    inner += `<p class="nl-text" style="margin:0 0 6px 0;font-family:${SANS};font-size:15px;line-height:22px;font-weight:bold;color:${C.text};">Klaus Bremen &middot; Newsletter</p>`;
+    if (f.contactText.trim() || mail) inner += small(`${esc(f.contactText)} ${mail ? lnk("mailto:" + mail, mail) : ""}`);
+    if (f.note.trim()) inner += small(esc(f.note));
+    if (f.unsubscribe.trim()) inner += small(esc(f.unsubscribe));
+    if (iu) inner += small(lnk(iu, f.imprintLabel || "Impressum"), 0);
+    rows.push(`<tr><td class="nl-foot nl-px" bgcolor="${C.foot}" style="background-color:${C.foot};border-top:1px solid ${C.line};padding:24px ${PAD}px 28px ${PAD}px;">${inner}</td></tr>`);
+  }
+
+  const pre = s.meta.preheader.trim();
+  const preHtml = pre ? `<div style="display:none;font-size:1px;line-height:1px;max-height:0;max-width:0;opacity:0;overflow:hidden;mso-hide:all;">${esc(pre)}${"&#8199;&#65279;&#847; ".repeat(40)}</div>` : "";
+
+  const bodyInner = `${preHtml}
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="nl-page" bgcolor="${C.page}" style="background-color:${C.page};">
+<tr><td align="center" style="padding:24px 8px;">
+<!--[if mso]><table role="presentation" width="${W}" align="center" cellpadding="0" cellspacing="0" border="0"><tr><td><![endif]-->
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" class="nl-card" bgcolor="${C.card}" style="max-width:${W}px;background-color:${C.card};border-collapse:collapse;">
+${rows.join("\n")}
+</table>
+<!--[if mso]></td></tr></table><![endif]-->
+</td></tr>
+</table>`;
+
+  if (opts.fragment) return `<div style="background-color:${C.page};">${bodyInner}</div>`;
+
+  const darkRules = Object.entries(DARK).map(([k, v]) => `${k}{${v}}`).join("\n    ");
+  const ogsc = Object.entries(DARK).map(([k, v]) => {
+    const sel = v.startsWith("background") ? `[data-ogsb] ${k}` : `[data-ogsc] ${k}`;
+    return `${sel}{${v}}`;
+  }).join("\n  ");
+  const css = `
+  :root{color-scheme:light dark;supported-color-schemes:light dark;}
+  body{margin:0;padding:0;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;}
+  table,td{mso-table-lspace:0pt;mso-table-rspace:0pt;}
+  img{-ms-interpolation-mode:bicubic;}
+  a[x-apple-data-detectors]{color:inherit !important;text-decoration:none !important;}
+  @media screen and (max-width:620px){
+    .nl-px{padding-left:20px !important;padding-right:20px !important;}
+    .nl-h1{font-size:34px !important;line-height:40px !important;}
+  }
+  ${opts.forceDark ? darkRules : `@media (prefers-color-scheme: dark){\n    ${darkRules}\n  }`}
+  ${ogsc}`;
+
+  return `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" lang="de" xml:lang="de">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="x-apple-disable-message-reformatting">
+<meta name="format-detection" content="telephone=no, date=no, address=no, email=no">
+<meta name="color-scheme" content="light dark">
+<meta name="supported-color-schemes" content="light dark">
+<title>${esc(s.meta.subject || "Newsletter")}</title>
+<!--[if mso]><noscript><xml><o:OfficeDocumentSettings><o:AllowPNG/><o:PixelsPerInch>96</o:PixelsPerInch></o:OfficeDocumentSettings></xml></noscript><![endif]-->
+<style type="text/css">${css}
+</style>
+</head>
+<body class="nl-page" style="margin:0;padding:0;background-color:${C.page};word-spacing:normal;">
+${bodyInner}
+</body>
+</html>`;
+}
+
+// Textversion (für Programme ohne HTML-Anzeige)
+function renderText(s) {
+  const L = [];
+  const line = "────────────────────────────────────────";
+  L.push("NEWSLETTER", "Klaus Bremen für den künftigen sozialen Staat");
+  if (s.show.issue) { const il = [s.meta.issue, s.meta.date].filter(x => x && x.trim()).join(" · "); if (il) L.push(il); }
+  L.push(line);
+  if (s.show.intro && (s.intro.title || s.intro.text)) {
+    if (s.intro.title) L.push("", s.intro.title.toUpperCase());
+    L.push("", plainText(s.intro.text)); if (s.intro.signature) L.push("", s.intro.signature);
+  }
+  if (s.show.articles) s.articles.forEach(a => {
+    if (!(a.title || a.text)) return;
+    L.push("", line, ""); if (a.title) L.push(a.title.toUpperCase(), "");
+    L.push(plainText(a.text));
+    const u = safeUrl(a.btnUrl); if (a.btnLabel && u) L.push("", `${a.btnLabel}: ${u}`);
+  });
+  if (s.show.quote && s.quote.text) { L.push("", line, "", "SATZ DER WOCHE", "", `„${s.quote.text.trim()}“`); if (s.quote.source) L.push(`— ${s.quote.source}`); }
+  if (s.show.footer) {
+    const f = s.footer; L.push("", line, "");
+    if (f.contactText || f.senderEmail) L.push(`${f.contactText} ${f.senderEmail}`.trim());
+    if (f.note) L.push(f.note); if (f.unsubscribe) L.push(f.unsubscribe);
+    const iu = safeUrl(f.imprintUrl); if (iu) L.push(`${f.imprintLabel || "Impressum"}: ${iu}`);
+  }
+  return L.join("\n").replace(/\n{3,}/g, "\n\n") + "\n";
+}
+
+// ---------- .eml (MIME) ----------
+function utf8B64(str) {
+  const bytes = new TextEncoder().encode(str); let bin = "";
+  for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+  return btoa(bin);
+}
+const wrap76 = b64 => b64.replace(/.{1,76}/g, "$&\r\n").trimEnd();
+function encodeHeader(v) {
+  if (/^[\x20-\x7e]*$/.test(v)) return v;
+  // RFC 2047, in Stücken < 75 Zeichen, ohne UTF-8-Zeichen zu zerteilen
+  const parts = []; let cur = "";
+  for (const ch of v) { if (new TextEncoder().encode(cur + ch).length > 42) { parts.push(cur); cur = ""; } cur += ch; }
+  if (cur) parts.push(cur);
+  return parts.map(p => `=?UTF-8?B?${utf8B64(p)}?=`).join("\r\n ");
+}
+function addrHeader(name, mail) { return `${/^[\w .-]*$/.test(name) ? name : encodeHeader(name)} <${mail}>`; }
+
+function collectImages(s) {
+  const list = [];
+  if (s.show.articles) s.articles.forEach(a => { if (a.image && (a.title.trim() || a.text.trim() || a.image)) list.push(a.image); });
+  if (s.show.gallery) s.gallery.images.forEach(g => list.push(g));
+  return list;
+}
+
+function buildEml(s) {
+  const imgs = collectImages(s);
+  const cidOf = new Map(); imgs.forEach((im, i) => cidOf.set(im, `bild${i + 1}.${Date.now().toString(36)}@newsletter.klaus-bremen`));
+  const html = renderEmail(s, { img: im => "cid:" + cidOf.get(im) });
+  const text = renderText(s);
+  const rnd = () => Math.random().toString(36).slice(2, 12);
+  const bAlt = "=_alt_" + rnd(), bRel = "=_rel_" + rnd();
+  const f = s.footer;
+  const from = addrHeader(f.senderName || "officeteam", f.senderEmail || "office.team@tilworks.de");
+  const out = [];
+  out.push("X-Unsent: 1");
+  out.push("From: " + from);
+  out.push("Reply-To: " + from);
+  out.push("To: " + from);
+  out.push("Subject: " + encodeHeader(s.meta.subject || "Newsletter"));
+  out.push("MIME-Version: 1.0");
+  out.push("X-Mailer: Newsletter-Generator Klaus Bremen");
+  out.push(`Content-Type: multipart/alternative; boundary="${bAlt}"`);
+  out.push("", "Dies ist eine mehrteilige Nachricht im MIME-Format.", "");
+  out.push("--" + bAlt);
+  out.push("Content-Type: text/plain; charset=UTF-8", "Content-Transfer-Encoding: base64", "", wrap76(utf8B64(text)), "");
+  out.push("--" + bAlt);
+  out.push(`Content-Type: multipart/related; boundary="${bRel}"; type="text/html"`, "");
+  out.push("--" + bRel);
+  out.push("Content-Type: text/html; charset=UTF-8", "Content-Transfer-Encoding: base64", "", wrap76(utf8B64(html)), "");
+  imgs.forEach((im, i) => {
+    const name = `bild${i + 1}.jpg`;
+    out.push("--" + bRel);
+    out.push(`Content-Type: image/jpeg; name="${name}"`, "Content-Transfer-Encoding: base64",
+      `Content-ID: <${cidOf.get(im)}>`, `Content-Disposition: inline; filename="${name}"`, "",
+      wrap76(im.data.slice(im.data.indexOf(",") + 1)), "");
+  });
+  out.push("--" + bRel + "--", "");
+  out.push("--" + bAlt + "--", "");
+  return out.join("\r\n");
+}
+
+function buildHtmlFile(s) { return renderEmail(s, { img: im => im.data }); }
+
+function fileBase(s) {
+  const d = new Date(); const pad = n => String(n).padStart(2, "0");
+  return `newsletter-klaus-bremen-${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())}`;
+}
+function download(name, content, type) {
+  const url = URL.createObjectURL(new Blob([content], { type }));
+  const a = document.createElement("a"); a.href = url; a.download = name; document.body.appendChild(a); a.click();
+  setTimeout(() => { URL.revokeObjectURL(url); a.remove(); }, 1500);
+}
+
+// ---------- Speichern (IndexedDB, Rückfall localStorage) ----------
+const DB = { name: "kb-newsletter", store: "s", key: "state" };
+function idb() {
+  return new Promise((res, rej) => {
+    if (!window.indexedDB) return rej(new Error("no idb"));
+    const r = indexedDB.open(DB.name, 1);
+    r.onupgradeneeded = () => r.result.createObjectStore(DB.store);
+    r.onsuccess = () => res(r.result); r.onerror = () => rej(r.error);
+  });
+}
+async function saveState() {
+  try {
+    const db = await idb();
+    await new Promise((res, rej) => { const tx = db.transaction(DB.store, "readwrite"); tx.objectStore(DB.store).put(JSON.stringify(state), DB.key); tx.oncomplete = res; tx.onerror = () => rej(tx.error); });
+    setSaved("Automatisch gespeichert " + new Date().toLocaleTimeString("de-DE", { hour: "2-digit", minute: "2-digit" }));
+  } catch (e) {
+    try { localStorage.setItem("kb-newsletter", JSON.stringify(state)); setSaved("Gespeichert (Fotos ggf. nicht)"); }
+    catch (e2) { setSaved("⚠ Zwischenspeichern nicht möglich – bitte „Entwurf als Datei sichern“"); }
+  }
+}
+async function loadState() {
+  try {
+    const db = await idb();
+    const raw = await new Promise((res, rej) => { const tx = db.transaction(DB.store, "readonly"); const q = tx.objectStore(DB.store).get(DB.key); q.onsuccess = () => res(q.result); q.onerror = () => rej(q.error); });
+    if (raw) return JSON.parse(raw);
+  } catch (e) { /* weiter */ }
+  try { const raw = localStorage.getItem("kb-newsletter"); if (raw) return JSON.parse(raw); } catch (e) { /* leer */ }
+  return null;
+}
+function setSaved(t) { $("#savedState").textContent = t; }
+let saveTimer = null;
+function scheduleSave() { clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 600); }
+
+function normalize(s) {
+  const b = blankState();
+  const out = Object.assign(b, s);
+  out.show = Object.assign(b.show, s.show); out.meta = Object.assign(blankState().meta, s.meta);
+  out.intro = Object.assign(blankState().intro, s.intro); out.quote = Object.assign(blankState().quote, s.quote);
+  out.gallery = Object.assign(blankState().gallery, s.gallery); out.footer = Object.assign({}, DEFAULT_FOOTER, s.footer);
+  out.articles = (s.articles && s.articles.length ? s.articles : [emptyArticle()]).map(a => Object.assign(emptyArticle(), a));
+  return out;
+}
+
+// ---------- Formular ----------
+const field = (path, label, opt = {}) => {
+  const v = getPath(state, path) ?? "";
+  const id = "f_" + path.replace(/\./g, "_");
+  const hint = opt.hint ? `<p class="hint">${opt.hint}</p>` : "";
+  const sm = opt.small ? ` <small>${opt.small}</small>` : "";
+  if (opt.area) return `<label class="f" for="${id}">${label}${sm}</label><textarea id="${id}" data-bind="${path}" placeholder="${esc(opt.ph || "")}" rows="${opt.rows || 5}">${esc(v)}</textarea>${hint}`;
+  return `<label class="f" for="${id}">${label}${sm}</label><input id="${id}" type="${opt.type || "text"}" data-bind="${path}" value="${esc(v)}" placeholder="${esc(opt.ph || "")}"${opt.max ? ` maxlength="${opt.max}"` : ""}>${hint}`;
+};
+const toggle = key => `<label class="toggle" onclick="event.stopPropagation()"><input type="checkbox" data-bind="show.${key}" ${state.show[key] ? "checked" : ""}> anzeigen</label>`;
+const section = (key, letter, title, body, open = true, noToggle = false) =>
+  `<details class="section${!noToggle && !state.show[key] ? " off" : ""}" data-sec="${key}" ${open ? "open" : ""}>
+     <summary><span class="letter">${letter}</span>${title}${noToggle ? "" : toggle(key)}</summary>
+     <div class="body">${body}</div></details>`;
+const FORMAT_HINT = "Leerzeile = neuer Absatz · <b>**fett**</b> · Link: [Linktext](https://…)";
+
+function dropzone(target, label) {
+  return `<label class="drop" data-drop="${target}" tabindex="0">${label}<br><small>Datei hierher ziehen oder klicken · wird automatisch verkleinert</small>
+    <input type="file" accept="image/*" ${target === "gallery" ? "multiple" : ""} data-file="${target}"></label>`;
+}
+
+function articleCard(a, i, n) {
+  const p = `articles.${i}`;
+  const imgPart = a.image
+    ? `<div class="thumb"><img src="${a.image.data}" alt=""><div>${esc(a.image.name || "Foto")}<br>${a.image.w}×${a.image.h} px · ${fmtMB(bytesOfDataUrl(a.image.data))}<br>
+        <button class="btn small danger" type="button" data-act="art-img-del" data-i="${i}">Foto entfernen</button></div></div>`
+    : dropzone("article:" + i, "📷 Foto hinzufügen (optional)");
+  return `<div class="card">
+    <div class="card-head"><strong>Artikel ${i + 1}</strong>
+      <button class="btn small" type="button" data-act="art-up" data-i="${i}" ${i === 0 ? "disabled" : ""} aria-label="Artikel ${i + 1} nach oben">↑</button>
+      <button class="btn small" type="button" data-act="art-down" data-i="${i}" ${i === n - 1 ? "disabled" : ""} aria-label="Artikel ${i + 1} nach unten">↓</button>
+      <button class="btn small danger" type="button" data-act="art-del" data-i="${i}" ${n <= 1 ? "disabled" : ""}>Entfernen</button>
+    </div>
+    ${field(p + ".title", "Titel", { ph: "z. B. Lesegruppen: Das Buch gemeinsam entdecken" })}
+    ${imgPart}
+    ${a.image ? field(p + ".alt", "Alt-Text", { small: "(beschreibt das Foto für Screenreader und wenn Bilder blockiert sind)", ph: "z. B. Fünf Menschen sitzen um einen Tisch und diskutieren" }) : ""}
+    ${a.image ? field(p + ".caption", "Bildunterschrift", { small: "(optional, z. B. Fotonachweis)", ph: "Foto: Name" }) : ""}
+    ${field(p + ".text", "Text", { area: true, rows: 6, ph: "Ihr Artikeltext …", hint: FORMAT_HINT })}
+    <div class="row2">
+      <div>${field(p + ".btnLabel", "Button-Text", { small: "(optional)", ph: "Mehr lesen" })}</div>
+      <div>${field(p + ".btnUrl", "Button-Link", { type: "url", ph: "https://…" })}</div>
+    </div>
+  </div>`;
+}
+
+function renderForm() {
+  const s = state;
+  const html = [];
+  html.push(section("meta", "a", "Ausgabe, Datum &amp; Betreff", `
+    <div class="row2"><div>${field("meta.issue", "Ausgabe", { ph: "Ausgabe 1" })}</div><div>${field("meta.date", "Datum", { ph: "17. November 2026" })}</div></div>
+    <label class="check"><input type="checkbox" data-bind="show.issue" ${s.show.issue ? "checked" : ""}> Ausgabe und Datum im Kopf anzeigen</label>
+    ${field("meta.subject", "Betreffzeile", { ph: "Newsletter Klaus Bremen · Ausgabe 1", max: 120, hint: "Kurz und konkret, ideal unter 60 Zeichen." })}
+    ${field("meta.preheader", "Vorschautext", { small: "(optional, erscheint im Posteingang neben dem Betreff)", max: 150, ph: "Neues zum Buch, Lesegruppen und Termine" })}`, true, true));
+  html.push(section("intro", "b", "Einleitung / Editorial", `
+    ${field("intro.title", "Überschrift", { ph: "Liebe Leserin, lieber Leser," })}
+    ${field("intro.text", "Text", { area: true, rows: 6, ph: "Ein paar persönliche Zeilen zum Auftakt …", hint: FORMAT_HINT })}
+    ${field("intro.signature", "Grußzeile", { ph: "Ihr Klaus Bremen" })}`));
+  html.push(section("articles", "c", `Artikel <small style="font-weight:400;color:var(--muted)">(${s.articles.length} von 5)</small>`,
+    `<div id="articleList">${s.articles.map((a, i) => articleCard(a, i, s.articles.length)).join("")}</div>
+     <p style="margin-top:12px"><button class="btn small" type="button" data-act="art-add" ${s.articles.length >= 5 ? "disabled" : ""}>+ Artikel hinzufügen</button></p>`));
+  const g = s.gallery;
+  html.push(section("gallery", "d", `Fotogalerie <small style="font-weight:400;color:var(--muted)">(${g.images.length} von 6)</small>`, `
+    ${field("gallery.title", "Überschrift", { small: "(optional)", ph: "Eindrücke" })}
+    <label class="f" for="f_gcols">Bilder pro Zeile</label>
+    <select id="f_gcols" data-bind="gallery.cols"><option value="2" ${g.cols == 2 ? "selected" : ""}>2 nebeneinander</option><option value="3" ${g.cols == 3 ? "selected" : ""}>3 nebeneinander</option></select>
+    <div class="gallery-grid">${g.images.map((im, i) => `<div class="gitem"><img src="${im.data}" alt="">
+      <input type="text" data-bind="gallery.images.${i}.alt" value="${esc(im.alt || "")}" placeholder="Alt-Text (Pflicht)" aria-label="Alt-Text Galeriebild ${i + 1}">
+      <div class="gbar"><button class="btn small" type="button" data-act="g-left" data-i="${i}" ${i === 0 ? "disabled" : ""} aria-label="Bild ${i + 1} nach vorne">←</button>
+      <button class="btn small" type="button" data-act="g-right" data-i="${i}" ${i === g.images.length - 1 ? "disabled" : ""} aria-label="Bild ${i + 1} nach hinten">→</button>
+      <button class="btn small danger" type="button" data-act="g-del" data-i="${i}">Entfernen</button></div></div>`).join("")}</div>
+    ${g.images.length < 6 ? dropzone("gallery", "🖼️ Fotos hinzufügen (mehrere möglich)") : ""}
+    <p class="hint">2 bis 6 Bilder. Galeriebilder werden einheitlich auf 3:2 zugeschnitten.${g.images.length === 1 ? " <b>Bitte mindestens ein weiteres Bild hinzufügen.</b>" : ""}</p>`, s.show.gallery));
+  html.push(section("quote", "e", "Zitat / Satz der Woche", `
+    ${field("quote.text", "Zitat", { area: true, rows: 3, ph: "Der Satz, der hängen bleiben soll …", hint: "Anführungszeichen werden automatisch gesetzt." })}
+    ${field("quote.source", "Quelle", { small: "(optional)", ph: "Klaus Bremen, „Uns neu umeinander kümmern“" })}`, s.show.quote));
+  html.push(section("footer", "f", "Fußbereich &amp; Absender", `
+    <div class="row2"><div>${field("footer.senderName", "Absendername")}</div><div>${field("footer.senderEmail", "Absenderadresse (auch Antwortadresse)", { type: "email" })}</div></div>
+    ${field("footer.contactText", "Kontaktzeile", { hint: "Die Absenderadresse wird automatisch als Link angehängt." })}
+    <div class="row2"><div>${field("footer.imprintLabel", "Linktext Impressum")}</div><div>${field("footer.imprintUrl", "Link zum Impressum", { type: "url" })}</div></div>
+    ${field("footer.unsubscribe", "Abmeldehinweis", { area: true, rows: 2 })}
+    ${field("footer.note", "Hinweis zur Einwilligung", { small: "(optional)", area: true, rows: 2 })}`, false));
+  $("#sections").innerHTML = html.join("");
+}
+
+// ---------- Vorschau ----------
+let view = { mobile: false, dark: false };
+const blobCache = new Map();
+function previewSrc(im) {
+  let u = blobCache.get(im.data);
+  if (!u) {
+    const i = im.data.indexOf(","); const bin = atob(im.data.slice(i + 1)); const arr = new Uint8Array(bin.length);
+    for (let k = 0; k < bin.length; k++) arr[k] = bin.charCodeAt(k);
+    u = URL.createObjectURL(new Blob([arr], { type: "image/jpeg" })); blobCache.set(im.data, u);
+  }
+  return u;
+}
+let pvTimer = null;
+function schedulePreview() { clearTimeout(pvTimer); pvTimer = setTimeout(updatePreview, 120); }
+function updatePreview() {
+  const frame = $("#preview");
+  const y = frame.contentWindow ? frame.contentWindow.scrollY : 0;
+  frame.onload = () => { try { frame.contentWindow.scrollTo(0, y); fitFrame(); } catch (e) { } };
+  frame.srcdoc = renderEmail(state, { img: previewSrc, forceDark: view.dark });
+  frame.classList.toggle("mobile", view.mobile);
+  const f = state.footer;
+  $("#envelope").innerHTML = `<div><b>Von</b>${esc(f.senderName)} &lt;${esc(f.senderEmail)}&gt;</div><div><b>An</b>${esc(f.senderEmail)} · Empfänger in BCC</div><div><b>Betreff</b><strong>${esc(state.meta.subject || "(kein Betreff)")}</strong> <span style="color:var(--muted)">${esc(state.meta.preheader)}</span></div>`;
+  updateMeter();
+}
+function fitFrame() {
+  const frame = $("#preview");
+  try { frame.style.height = Math.max(600, frame.contentDocument.documentElement.scrollHeight + 4) + "px"; } catch (e) { }
+}
+function updateMeter() {
+  const imgs = collectImages(state);
+  const bytes = imgs.reduce((s, im) => s + bytesOfDataUrl(im.data), 0);
+  const total = Math.round(bytes * 1.37) + 60000; // Base64-Aufschlag + HTML
+  const m = $("#meter");
+  m.textContent = `${imgs.length} Foto${imgs.length === 1 ? "" : "s"} · Mailgröße ca. ${fmtMB(total)}`;
+  const over = total > WARN_BYTES;
+  m.classList.toggle("warn", over);
+  const w = $("#sizeWarn");
+  w.classList.toggle("show", over);
+  if (over) w.innerHTML = `<b>Achtung: Die Mail wird ca. ${fmtMB(total)} groß.</b> Empfohlen sind höchstens 5 MB. Bitte Fotos entfernen oder weniger Galeriebilder verwenden.`;
+}
+
+// ---------- Ereignisse ----------
+function changed(rerender) {
+  if (rerender) { const open = [...document.querySelectorAll(".section")].map(d => d.open); renderForm(); document.querySelectorAll(".section").forEach((d, i) => { if (open[i] !== undefined) d.open = open[i]; }); }
+  schedulePreview(); scheduleSave();
+}
+
+$("#form").addEventListener("input", e => {
+  const el = e.target; const path = el.dataset && el.dataset.bind; if (!path) return;
+  let v = el.type === "checkbox" ? el.checked : el.value;
+  if (path === "gallery.cols") v = Number(v);
+  setPath(state, path, v);
+  if (path.startsWith("show.")) {
+    const sec = document.querySelector(`.section[data-sec="${path.slice(5)}"]`);
+    if (sec) sec.classList.toggle("off", !v);
+    document.querySelectorAll(`[data-bind="${path}"]`).forEach(x => { if (x !== el) x.checked = v; });
+  }
+  changed(false);
+});
+
+$("#form").addEventListener("click", e => {
+  const b = e.target.closest("[data-act]"); if (!b) return;
+  const i = Number(b.dataset.i); const A = state.articles; const G = state.gallery.images;
+  const swap = (arr, x, y) => { [arr[x], arr[y]] = [arr[y], arr[x]]; };
+  switch (b.dataset.act) {
+    case "art-add": if (A.length < 5) A.push(emptyArticle()); break;
+    case "art-del": if (A.length > 1 && confirm(`Artikel ${i + 1} wirklich entfernen?`)) A.splice(i, 1); else return; break;
+    case "art-up": if (i > 0) swap(A, i, i - 1); break;
+    case "art-down": if (i < A.length - 1) swap(A, i, i + 1); break;
+    case "art-img-del": A[i].image = null; break;
+    case "g-left": if (i > 0) swap(G, i, i - 1); break;
+    case "g-right": if (i < G.length - 1) swap(G, i, i + 1); break;
+    case "g-del": G.splice(i, 1); break;
+    default: return;
+  }
+  changed(true);
+});
+
+async function handleFiles(target, files) {
+  files = [...files].filter(f => /^image\//.test(f.type));
+  if (!files.length) { toast("Bitte eine Bilddatei (JPG, PNG …) wählen."); return; }
+  try {
+    if (target === "gallery") {
+      const free = 6 - state.gallery.images.length;
+      if (files.length > free) toast(`Nur noch ${free} Platz/Plätze frei – die übrigen Bilder wurden ignoriert.`);
+      for (const f of files.slice(0, free)) {
+        const im = await processImage(f, GALLERY_IMG_W, 1.5); im.alt = ""; state.gallery.images.push(im);
+      }
+      if (!state.show.gallery) state.show.gallery = true;
+    } else {
+      const i = Number(target.split(":")[1]);
+      state.articles[i].image = await processImage(files[0], MAX_IMG_W, null);
+    }
+    changed(true);
+    toast("Foto eingefügt und verkleinert. Bitte einen Alt-Text ergänzen.");
+  } catch (err) { toast("Fehler: " + err.message, 5000); }
+}
+$("#form").addEventListener("change", e => { const t = e.target.dataset && e.target.dataset.file; if (t) handleFiles(t, e.target.files); });
+$("#form").addEventListener("dragover", e => { const d = e.target.closest("[data-drop]"); if (d) { e.preventDefault(); d.classList.add("over"); } });
+$("#form").addEventListener("dragleave", e => { const d = e.target.closest("[data-drop]"); if (d) d.classList.remove("over"); });
+$("#form").addEventListener("drop", e => { const d = e.target.closest("[data-drop]"); if (!d) return; e.preventDefault(); d.classList.remove("over"); handleFiles(d.dataset.drop, e.dataTransfer.files); });
+$("#form").addEventListener("keydown", e => { const d = e.target.closest && e.target.closest("label.drop"); if (d && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); d.querySelector("input").click(); } });
+// Bilder, die versehentlich neben die Ablagefläche gezogen werden, nicht im Browser öffnen
+window.addEventListener("dragover", e => e.preventDefault());
+window.addEventListener("drop", e => e.preventDefault());
+
+function setView(k, v) {
+  view[k] = v;
+  $("#viewDesktop").setAttribute("aria-pressed", String(!view.mobile)); $("#viewMobile").setAttribute("aria-pressed", String(view.mobile));
+  $("#viewLight").setAttribute("aria-pressed", String(!view.dark)); $("#viewDark").setAttribute("aria-pressed", String(view.dark));
+  updatePreview();
+}
+$("#viewDesktop").onclick = () => setView("mobile", false);
+$("#viewMobile").onclick = () => setView("mobile", true);
+$("#viewLight").onclick = () => setView("dark", false);
+$("#viewDark").onclick = () => setView("dark", true);
+
+function checkReady() {
+  const probs = [];
+  if (!state.meta.subject.trim()) probs.push("Betreffzeile fehlt");
+  state.articles.forEach((a, i) => { if (state.show.articles && a.image && !(a.alt || a.caption || a.title).trim()) probs.push(`Alt-Text bei Artikel ${i + 1} fehlt`); if (a.btnLabel.trim() && !safeUrl(a.btnUrl)) probs.push(`Button-Link bei Artikel ${i + 1} fehlt oder ist ungültig`); });
+  if (state.show.gallery) {
+    if (state.gallery.images.length === 1) probs.push("Galerie braucht mindestens 2 Bilder");
+    state.gallery.images.forEach((g, i) => { if (!(g.alt || "").trim()) probs.push(`Alt-Text bei Galeriebild ${i + 1} fehlt`); });
+  }
+  if (probs.length) return confirm("Bitte prüfen:\n\n• " + probs.join("\n• ") + "\n\nTrotzdem fortfahren?");
+  return true;
+}
+
+$("#btnEml").onclick = () => {
+  if (!checkReady()) return;
+  download(fileBase(state) + ".eml", buildEml(state), "message/rfc822");
+  toast("Gespeichert. Datei im Download-Ordner doppelklicken – Outlook öffnet den Entwurf. Empfänger in BCC eintragen.", 6500);
+};
+$("#btnHtml").onclick = () => { download(fileBase(state) + ".html", buildHtmlFile(state), "text/html;charset=utf-8"); toast("HTML-Datei gespeichert."); };
+$("#btnCopy").onclick = async () => {
+  const html = renderEmail(state, { img: im => im.data, fragment: true });
+  const text = renderText(state);
+  let ok = false;
+  const onCopy = ev => { ev.clipboardData.setData("text/html", html); ev.clipboardData.setData("text/plain", text); ev.preventDefault(); ok = true; };
+  document.addEventListener("copy", onCopy);
+  try { document.execCommand("copy"); } catch (e) { }
+  document.removeEventListener("copy", onCopy);
+  if (!ok && navigator.clipboard && window.ClipboardItem) {
+    try { await navigator.clipboard.write([new ClipboardItem({ "text/html": new Blob([html], { type: "text/html" }), "text/plain": new Blob([text], { type: "text/plain" }) })]); ok = true; } catch (e) { }
+  }
+  toast(ok ? "Kopiert. In Outlook: Neue E-Mail → Strg+V. Betreff selbst eintragen. Fehlen Fotos, bitte die .eml-Datei nutzen." : "Kopieren nicht möglich – bitte „Als .eml herunterladen“ nutzen.", 7000);
+};
+
+$("#btnNew").onclick = () => {
+  if (!confirm("Neue Ausgabe beginnen? Alle Texte und Fotos werden geleert. Absender und Fußbereich bleiben erhalten.\n\nTipp: Vorher „Entwurf als Datei sichern“.")) return;
+  state = blankState(state.footer); changed(true); toast("Neue, leere Ausgabe angelegt.");
+};
+$("#btnDemo").onclick = async () => {
+  if (!confirm("Demo-Beispiel laden? Die aktuellen Eingaben werden ersetzt.")) return;
+  state = await demoState(); changed(true);
+};
+$("#btnSaveJson").onclick = () => { download(fileBase(state) + "-entwurf.json", JSON.stringify(state), "application/json"); toast("Entwurf gesichert."); };
+$("#fileJson").onchange = async e => {
+  const f = e.target.files[0]; if (!f) return;
+  try { state = normalize(JSON.parse(await f.text())); changed(true); toast("Entwurf geöffnet."); }
+  catch (err) { toast("Die Datei ist kein gültiger Entwurf."); }
+  e.target.value = "";
+};
+
+// ---------- Demo-Beispiel ----------
+/** Erzeugt lizenzfreie Platzhalterbilder (Fäden/Netz-Motiv in den Website-Farben). */
+function demoImage(w, h, seed, label) {
+  const cv = document.createElement("canvas"); cv.width = w; cv.height = h; const x = cv.getContext("2d");
+  let r = seed * 9301 + 49297; const rnd = () => (r = (r * 9301 + 49297) % 233280) / 233280;
+  const g = x.createLinearGradient(0, 0, w, h);
+  const pal = [["#1d4f9a", "#112f5c"], ["#2b6cc4", "#1d4f9a"], ["#112f5c", "#1d6b5a"], ["#3b5f8f", "#0f2645"]][seed % 4];
+  g.addColorStop(0, pal[0]); g.addColorStop(1, pal[1]); x.fillStyle = g; x.fillRect(0, 0, w, h);
+  const pts = Array.from({ length: 14 }, () => [rnd() * w, rnd() * h]).filter(p => !(p[0] < w * 0.45 && p[1] > h * 0.75)); // Platz für die Beschriftung
+  x.lineWidth = Math.max(2, w / 300);
+  for (let i = 0; i < pts.length; i++) for (let j = i + 1; j < pts.length; j++) {
+    const d = Math.hypot(pts[i][0] - pts[j][0], pts[i][1] - pts[j][1]);
+    if (d < w * 0.42) { x.strokeStyle = `rgba(47,240,136,${0.55 - d / (w * 0.9)})`; x.beginPath(); x.moveTo(...pts[i]);
+      x.quadraticCurveTo((pts[i][0] + pts[j][0]) / 2 + (rnd() - .5) * 80, (pts[i][1] + pts[j][1]) / 2 + (rnd() - .5) * 80, ...pts[j]); x.stroke(); }
+  }
+  pts.forEach(p => { x.fillStyle = "#ffffff"; x.beginPath(); x.arc(p[0], p[1], w / 90, 0, 7); x.fill(); });
+  x.fillStyle = "rgba(255,255,255,.92)"; x.font = `bold ${Math.round(w / 26)}px Arial, sans-serif`; x.fillText(label, w / 22, h - h / 12);
+  return { id: "demo" + seed, data: cv.toDataURL("image/jpeg", JPEG_Q), w, h, name: "beispielbild-" + seed + ".jpg" };
+}
+async function demoState() {
+  const s = blankState();
+  s.show = { issue: true, intro: true, articles: true, gallery: true, quote: true, footer: true };
+  s.meta = { issue: "Ausgabe 1", date: "November 2026", subject: "Newsletter Klaus Bremen · Ausgabe 1", preheader: "Lesegruppen, Orte aktiver Lebenssorge und der Satz der Woche" };
+  s.intro = {
+    title: "Liebe Leserin, lieber Leser,",
+    text: "mit diesem ersten Newsletter möchte ich Sie regelmäßig auf dem Laufenden halten: über Gespräche zu meinem Buch **„Uns neu umeinander kümmern“**, über Lesegruppen und über Ideen für einen sozialen Staat, der den langen Lauf durch das Zeitalter von Klima- und Naturveränderungen besteht.\n\nIch freue mich über Ihre Rückmeldungen. Antworten Sie einfach auf diese E-Mail.",
+    signature: "Ihr Klaus Bremen"
+  };
+  s.articles = [
+    Object.assign(emptyArticle(), {
+      title: "Das Buch gemeinsam lesen: Yarning und Fadenspinnen",
+      image: demoImage(1200, 800, 1, "Beispielbild"),
+      alt: "Grafik: weiße Knotenpunkte, verbunden durch grüne Fäden auf blauem Grund",
+      caption: "Beispielbild – hier steht später der Fotonachweis.",
+      text: "Eine Kernbotschaft des Buchs ist, dass wir unser gemeinsames soziales Handeln wieder miteinander entdecken. Dafür eignet sich schon das Buch selbst: Lesen Sie es mit Freunden, Kolleginnen oder neuen Bekannten und diskutieren Sie in einer Gruppe darüber.\n\nDas PDF **„Yarning und Fadenspinnen“** enthält Tipps für Ihre persönliche Lesegruppe.",
+      btnLabel: "PDF herunterladen", btnUrl: "https://klaus-bremen.de/download/klaus-bremen-lesegruppe-yarning.pdf"
+    }),
+    Object.assign(emptyArticle(), {
+      title: "Orte aktiver Lebenssorge",
+      image: demoImage(1200, 675, 2, "Beispielbild"),
+      alt: "Grafik: Netz aus Linien und Punkten in Blau und Mint",
+      text: "Betreuung und Pflege, Gesundheitsversorgung, frühe Bildung und soziale Unterstützung können sich zu geschützten Orten aktiver Lebenssorge entwickeln. Dafür braucht es Strukturen, in denen soziale Netzwerke überall im Land angeregt und kompetent unterstützt werden.\n\nIm Buch plädiere ich außerdem für einen Rechtsanspruch auf soziale Zeit. Mehr dazu auf [klaus-bremen.de](https://klaus-bremen.de)."
+    }),
+    Object.assign(emptyArticle(), {
+      title: "Jetzt im Buchhandel",
+      text: "**Klaus Bremen: Uns neu umeinander kümmern.** Den sozialen Staat für das Zeitalter von Klima- und Naturveränderungen umgestalten.\noekom verlag, München 2025 · 288 Seiten · 28 Euro · ISBN 978-3-98726-183-1",
+      btnLabel: "Buch bestellen", btnUrl: "https://www.oekom.de/buch/uns-neu-umeinander-kuemmern-9783987261831"
+    })
+  ];
+  s.gallery = { title: "Eindrücke", cols: 3, images: [3, 4, 5].map((n, i) => Object.assign(demoImage(640, 427, n, "Beispiel " + (i + 1)), { alt: `Beispielbild ${i + 1}: abstraktes Netz in Blau und Mint` })) };
+  s.quote = { text: "Um uns neu umeinander kümmern zu können, brauchen wir jetzt Investitionen in das, was Menschen im langen Lauf wirklich stärkt: Vertrauen, Nähe und Zusammenarbeit.", source: "Klaus Bremen, klaus-bremen.de" };
+  return s;
+}
+
+// ---------- Start ----------
+window.NL = { get state() { return state; }, set state(v) { state = normalize(v); changed(true); }, renderEmail, renderText, buildEml, buildHtmlFile, demoState, collectImages };
+(async () => {
+  const saved = await loadState();
+  if (saved) { state = normalize(saved); setSaved("Letzter Stand wiederhergestellt"); }
+  else { state = await demoState(); }
+  renderForm(); updatePreview();
+  window.addEventListener("resize", fitFrame);
+  document.documentElement.dataset.ready = "1";
+})();
+</script>
+</body>
+</html>
